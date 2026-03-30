@@ -1,0 +1,62 @@
+/* keep all original custom styles exactly as provided */
+    @font-face {
+        font-family: 'Raleway-Light';
+        src: url('fonts/Raleway-Light.ttf') format('truetype');
+        font-weight: 300;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Rationale-Regular';
+        src: url('fonts/Rationale-Regular.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    .header-hover-shadow {
+        transition: text-shadow 0.25s ease-out;
+    }
+
+    .header-hover-shadow:hover {
+        text-shadow: 0 4px 10px rgba(220, 38, 38, 0.7), 0 2px 4px rgba(220, 38, 38, 0.5);
+    }
+
+    .nav-link {
+        position: relative;
+        transition: color 0.2s ease;
+    }
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -6px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: #ef4444;
+        transition: width 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        border-radius: 2px;
+    }
+
+    .nav-link:hover::after {
+        width: 100%;
+    }
+
+    .custom-header-height {
+        height: 30vh;
+        min-height: 160px;
+    }
+
+    .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    /* extra utility for left border accent */
+    .left-accent-border {
+        border-left: 4px solid #ef4444;
+    }
