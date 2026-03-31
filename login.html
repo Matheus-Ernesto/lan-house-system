@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LanHouseSystem - Login</title>
+    <title>LanHouseSystem - Cadastro</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="style.css">
     <style>
@@ -15,53 +14,61 @@
 
         .header-hover-shadow {
             transition: text-shadow 0.3s ease, transform 0.3s ease;
+        }
+        .header-hover-shadow:hover {
+            text-shadow: 0 0 8px rgba(255, 215, 175, 0.6);
+            transform: scale(1.01);
+        }
 
-            .header-hover-shadow:hover {
-                text-shadow: 0 0 8px rgba(255, 215, 175, 0.6);
-                transform: scale(1.01);
-            }
+        .nav-link {
+            position: relative;
+        }
 
-            .nav-link {
-                position: relative;
-            }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 1.5px;
+            background-color: #c9a87b;
+            transition: width 0.25s ease;
+        }
 
-            .nav-link::after {
-                content: '';
-                position: absolute;
-                bottom: -4px;
-                left: 0;
-                width: 0%;
-                height: 1.5px;
-                background-color: #c9a87b;
-                transition: width 0.25s ease;
-            }
+        .nav-link:hover::after {
+            width: 100%;
+        }
 
-            .nav-link:hover::after {
-                width: 100%;
-            }
+        /* Custom scrollbar to match rustic theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #5a3e2e;
+            border-radius: 4px;
+        }
 
-            /* Custom scrollbar to match rustic theme */
-            ::-webkit-scrollbar {
-                width: 8px;
-            }
+        input:focus {
+            outline: none;
+            border-color: #c9a87b;
+            box-shadow: 0 0 0 2px rgba(201, 168, 123, 0.3);
+        }
 
-            ::-webkit-scrollbar-track {
-                background: #1e1e1e;
-            }
-
-            ::-webkit-scrollbar-thumb {
-                background: #5a3e2e;
-                border-radius: 4px;
-            }
-
-            input:focus {
-                outline: none;
-                border-color: #c9a87b;
-                box-shadow: 0 0 0 2px rgba(201, 168, 123, 0.3);
-            }
+        /* Transição suave para troca de seções */
+        .form-section {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .form-section.hidden {
+            display: none;
+        }
+        .form-section:not(.hidden) {
+            display: block;
+        }
     </style>
 </head>
-
 <body class="bg-black m-0 p-0">
     <header class="h-[30vh] min-h-[160px] w-full bg-[#2c1810] flex items-center px-6 md:px-12 lg:px-20">
         <div class="header-container max-w-7xl mx-auto w-full">
@@ -99,78 +106,210 @@
         </div>
     </header>
 
-    <!-- Login Section: two columns (image left, form right) with same background as header -->
-    <section
-        class="w-full bg-[#2c1810] py-16 px-4 md:px-12 lg:px-20 flex flex-col md:flex-row items-center justify-center gap-12 md:gap-16">
-        <!-- Left side: Image with rounded corners, fixed dimensions (30vw width, 80vh max-height) -->
+    <!-- Seção principal que contém a imagem e os formulários -->
+    <section id="dynamic-section"
+        class="w-full bg-black py-16 px-4 md:px-12 lg:px-20 flex flex-col md:flex-row items-center justify-center gap-12 md:gap-16">
+        
+        <!-- Lado esquerdo: Imagem fixa (sempre visível) -->
         <div class="w-full md:w-[30vw] max-w-[400px] md:max-w-[30vw] flex justify-center">
             <img src="assets/19.jpg" alt="Gaming setup"
                 class="rounded-2xl shadow-2xl object-cover w-full h-auto md:h-[80vh] max-h-[500px] md:max-h-[80vh] border-2 border-amber-800/40"
                 onerror="this.onerror=null; this.src='https://placehold.co/800x1000/3a251c/ccaa88?text=Lan+House+Ambience';">
         </div>
 
-        <!-- Right side: Login Form Card with proper spacing & theme -->
-        <div
-            class="w-full md:w-[40%] max-w-md bg-[#1f130c] rounded-2xl p-8 md:p-10 shadow-2xl border border-amber-800/30">
-            <h2 class="text-white text-4xl md:text-5xl mb-8 text-center tracking-wide"
-                style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
-                Login
-            </h2>
-
-            <div class="space-y-5">
-                <!-- Email Field -->
-                <div>
-                    <label class="block text-amber-200 text-base md:text-lg mb-2 font-medium"
+        <!-- Lado direito: Container que alterna entre LOGIN, RECUPERAÇÃO e CADASTRO -->
+        <div class="w-full md:w-[40%] max-w-md">
+            <!-- FORMULÁRIO DE LOGIN (visível inicialmente) -->
+            <div id="login-form-container" class="form-section">
+                <div class="bg-[#1f130c] rounded-2xl p-8 md:p-10 shadow-2xl border border-amber-800/30">
+                    <h2 class="text-white text-4xl md:text-5xl mb-8 text-center tracking-wide"
                         style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
-                        Email
-                    </label>
-                    <input type="email" name="email" id="login-email" placeholder="seu@email.com"
-                        class="w-full bg-[#2c1a12] border border-amber-700/60 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-amber-500 transition-all duration-200"
-                        style="font-family: 'Segoe UI', system-ui, sans-serif;">
-                </div>
+                        Login
+                    </h2>
 
-                <!-- Password Field -->
-                <div>
-                    <label class="block text-amber-200 text-base md:text-lg mb-2 font-medium"
-                        style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
-                        Senha
-                    </label>
-                    <input type="password" name="password" id="login-password" placeholder="••••••••"
-                        class="w-full bg-[#2c1a12] border border-amber-700/60 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-amber-500 transition-all duration-200">
-                </div>
+                    <div class="space-y-5">
+                        <!-- Email Field -->
+                        <div>
+                            <label class="block text-amber-200 text-base md:text-lg mb-2 font-medium"
+                                style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
+                                Email
+                            </label>
+                            <input type="email" name="email" id="login-email" placeholder="seu@email.com"
+                                class="w-full bg-[#2c1a12] border border-amber-700/60 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-amber-500 transition-all duration-200"
+                                style="font-family: 'Segoe UI', system-ui, sans-serif;">
+                        </div>
 
-                <!-- Forgot password link -->
-                <div class="text-right">
-                    <a href="#" class="text-amber-400 hover:text-amber-300 text-sm transition-colors duration-200"
-                        style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
-                        Esqueci minha senha.
-                    </a>
-                </div>
+                        <!-- Password Field -->
+                        <div>
+                            <label class="block text-amber-200 text-base md:text-lg mb-2 font-medium"
+                                style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
+                                Senha
+                            </label>
+                            <input type="password" name="password" id="login-password" placeholder="••••••••"
+                                class="w-full bg-[#2c1a12] border border-amber-700/60 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-amber-500 transition-all duration-200">
+                        </div>
 
-                <!-- Main Login Button -->
-                <button id="login-btn"
-                    class="w-full bg-white text-[#2c1810] hover:bg-gray-100 font-bold py-3.5 px-6 rounded-full transition-all duration-300 text-xl shadow-xl hover:scale-[1.02] active:scale-95 mt-4"
-                    style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
-                    Entrar
-                </button>
+                        <!-- Forgot password link -->
+                        <div class="text-right">
+                            <a href="#" id="forgot-password-link" class="text-amber-400 hover:text-amber-300 text-sm transition-colors duration-200"
+                                style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
+                                Esqueci minha senha.
+                            </a>
+                        </div>
 
-                <!-- Divider -->
-                <div class="relative my-6">
-                    <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-amber-800/40"></div>
+                        <!-- Main Login Button -->
+                        <button id="login-btn"
+                            class="w-full bg-white text-[#2c1810] hover:bg-gray-100 font-bold py-3.5 px-6 rounded-full transition-all duration-300 text-xl shadow-xl hover:scale-[1.02] active:scale-95 mt-4"
+                            style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
+                            Entrar
+                        </button>
+
+                        <!-- Divider -->
+                        <div class="relative my-6">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-amber-800/40"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-3 bg-[#1f130c] text-amber-400/70" style="font-family: monospace;">ou</span>
+                            </div>
+                        </div>
+
+                        <!-- Create account button (secondary action) -->
+                        <div class="text-center">
+                            <button id="signup-redirect"
+                                class="w-full bg-transparent border-2 border-amber-600/60 text-amber-200 hover:bg-amber-800/30 hover:border-amber-500 font-semibold py-3 px-6 rounded-full transition-all duration-300 text-lg"
+                                style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
+                                Não tenho uma conta ainda.
+                            </button>
+                        </div>
                     </div>
-                    <div class="relative flex justify-center text-sm">
-                        <span class="px-3 bg-[#1f130c] text-amber-400/70" style="font-family: monospace;">ou</span>
+                </div>
+            </div>
+
+            <!-- FORMULÁRIO DE RECUPERAÇÃO DE SENHA (ESQUECEU A SENHA) -->
+            <div id="forgot-form-container" class="form-section hidden">
+                <div class="bg-[#1f130c] rounded-2xl p-8 md:p-10 shadow-2xl border border-amber-800/30">
+                    <h2 class="text-white text-4xl md:text-5xl mb-6 text-center tracking-wide"
+                        style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
+                        Recuperar Senha
+                    </h2>
+                    <p class="text-amber-200/80 text-center mb-8 text-sm md:text-base"
+                        style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
+                        Insira seu e-mail para receber as instruções de redefinição.
+                    </p>
+
+                    <div class="space-y-6">
+                        <!-- Email Field for recovery -->
+                        <div>
+                            <label class="block text-amber-200 text-base md:text-lg mb-2 font-medium"
+                                style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
+                                E-mail cadastrado
+                            </label>
+                            <input type="email" id="recovery-email" placeholder="seu@email.com"
+                                class="w-full bg-[#2c1a12] border border-amber-700/60 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-amber-500 transition-all duration-200"
+                                style="font-family: 'Segoe UI', system-ui, sans-serif;">
+                        </div>
+
+                        <!-- Botão Enviar link de recuperação -->
+                        <button id="send-recovery-btn"
+                            class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3.5 px-6 rounded-full transition-all duration-300 text-xl shadow-xl hover:scale-[1.02] active:scale-95 mt-2"
+                            style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
+                            Enviar link
+                        </button>
+
+                        <!-- Botão Voltar para o login -->
+                        <div class="text-center mt-4">
+                            <button id="back-to-login-btn"
+                                class="w-full bg-transparent border border-amber-600/50 text-amber-300 hover:bg-amber-800/20 hover:border-amber-400 font-medium py-2.5 px-6 rounded-full transition-all duration-300 text-base"
+                                style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
+                                ← Voltar para o login
+                            </button>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Create account button (secondary action) -->
-                <div class="text-center">
-                    <button id="signup-redirect"
-                        class="w-full bg-transparent border-2 border-amber-600/60 text-amber-200 hover:bg-amber-800/30 hover:border-amber-500 font-semibold py-3 px-6 rounded-full transition-all duration-300 text-lg"
+            <!-- FORMULÁRIO DE CADASTRO (CRIAR CONTA) - INICIALMENTE OCULTO -->
+            <div id="register-form-container" class="form-section hidden">
+                <div class="bg-[#1f130c] rounded-2xl p-8 md:p-10 shadow-2xl border border-amber-800/30">
+                    <h2 class="text-white text-4xl md:text-5xl mb-6 text-center tracking-wide"
                         style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
-                        Não tenho uma conta ainda.
-                    </button>
+                        Criar Conta
+                    </h2>
+                    <p class="text-amber-200/80 text-center mb-8 text-sm md:text-base"
+                        style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
+                        Preencha os dados abaixo para se cadastrar.
+                    </p>
+
+                    <div class="space-y-5">
+                        <!-- Nome Field -->
+                        <div>
+                            <label class="block text-amber-200 text-base md:text-lg mb-2 font-medium"
+                                style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
+                                Nome completo
+                            </label>
+                            <input type="text" id="register-name" placeholder="Seu nome completo"
+                                class="w-full bg-[#2c1a12] border border-amber-700/60 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-amber-500 transition-all duration-200"
+                                style="font-family: 'Segoe UI', system-ui, sans-serif;">
+                        </div>
+
+                        <!-- Email Field for registration -->
+                        <div>
+                            <label class="block text-amber-200 text-base md:text-lg mb-2 font-medium"
+                                style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
+                                E-mail
+                            </label>
+                            <input type="email" id="register-email" placeholder="seu@email.com"
+                                class="w-full bg-[#2c1a12] border border-amber-700/60 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-amber-500 transition-all duration-200"
+                                style="font-family: 'Segoe UI', system-ui, sans-serif;">
+                        </div>
+
+                        <!-- Password Field for registration -->
+                        <div>
+                            <label class="block text-amber-200 text-base md:text-lg mb-2 font-medium"
+                                style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
+                                Senha
+                            </label>
+                            <input type="password" id="register-password" placeholder="••••••••"
+                                class="w-full bg-[#2c1a12] border border-amber-700/60 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-amber-500 transition-all duration-200">
+                        </div>
+
+                        <!-- Confirm Password Field -->
+                        <div>
+                            <label class="block text-amber-200 text-base md:text-lg mb-2 font-medium"
+                                style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
+                                Confirmar senha
+                            </label>
+                            <input type="password" id="register-confirm-password" placeholder="••••••••"
+                                class="w-full bg-[#2c1a12] border border-amber-700/60 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-amber-500 transition-all duration-200">
+                        </div>
+
+                        <!-- Register Button -->
+                        <button id="register-btn"
+                            class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3.5 px-6 rounded-full transition-all duration-300 text-xl shadow-xl hover:scale-[1.02] active:scale-95 mt-4"
+                            style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
+                            Cadastrar
+                        </button>
+
+                        <!-- Divider -->
+                        <div class="relative my-6">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-amber-800/40"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-3 bg-[#1f130c] text-amber-400/70" style="font-family: monospace;">ou</span>
+                            </div>
+                        </div>
+
+                        <!-- Back to Login Button -->
+                        <div class="text-center">
+                            <button id="back-to-login-from-register"
+                                class="w-full bg-transparent border border-amber-600/50 text-amber-300 hover:bg-amber-800/20 hover:border-amber-400 font-medium py-2.5 px-6 rounded-full transition-all duration-300 text-base"
+                                style="font-family: 'Rationale-Regular', 'Courier New', monospace;">
+                                ← Já tenho uma conta
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -183,19 +322,63 @@
     </footer>
 
     <script>
-        // Simple interactive demo to match the academic purpose (no backend, just UI alerts/feedback)
         (function () {
+            // Elementos dos formulários
+            const loginContainer = document.getElementById('login-form-container');
+            const forgotContainer = document.getElementById('forgot-form-container');
+            const registerContainer = document.getElementById('register-form-container');
+            
+            const forgotLink = document.getElementById('forgot-password-link');
+            const backToLoginBtn = document.getElementById('back-to-login-btn');
+            const signupBtn = document.getElementById('signup-redirect');
+            const backToLoginFromRegister = document.getElementById('back-to-login-from-register');
+            
             const loginBtn = document.getElementById('login-btn');
             const emailInput = document.getElementById('login-email');
             const passwordInput = document.getElementById('login-password');
-            const signupBtn = document.getElementById('signup-redirect');
-            const forgotLink = document.querySelector('a[href="#"]'); // forgot password link
+            
+            const sendRecoveryBtn = document.getElementById('send-recovery-btn');
+            const recoveryEmailInput = document.getElementById('recovery-email');
+            
+            const registerBtn = document.getElementById('register-btn');
+            const registerName = document.getElementById('register-name');
+            const registerEmail = document.getElementById('register-email');
+            const registerPassword = document.getElementById('register-password');
+            const registerConfirmPassword = document.getElementById('register-confirm-password');
 
-            // Helper: simple validation for demo
+            // Funções para alternar entre seções
+            function showLoginForm() {
+                loginContainer.classList.remove('hidden');
+                forgotContainer.classList.add('hidden');
+                registerContainer.classList.add('hidden');
+                // Limpar campos
+                if (recoveryEmailInput) recoveryEmailInput.value = '';
+                if (registerName) registerName.value = '';
+                if (registerEmail) registerEmail.value = '';
+                if (registerPassword) registerPassword.value = '';
+                if (registerConfirmPassword) registerConfirmPassword.value = '';
+            }
+
+            function showForgotForm() {
+                loginContainer.classList.add('hidden');
+                forgotContainer.classList.remove('hidden');
+                registerContainer.classList.add('hidden');
+                setTimeout(() => {
+                    if (recoveryEmailInput) recoveryEmailInput.focus();
+                }, 100);
+            }
+
+            function showRegisterForm() {
+                loginContainer.classList.add('hidden');
+                forgotContainer.classList.add('hidden');
+                registerContainer.classList.remove('hidden');
+                setTimeout(() => {
+                    if (registerName) registerName.focus();
+                }, 100);
+            }
+
+            // Helper: sistema de toast/notificação
             function showMessage(msg, isError = true) {
-                // Create temporary floating message or alert (non-intrusive, but visible)
-                // We'll use a subtle alert for demonstration (academic project)
-                // But also create a temporary toast-like element for better UX
                 const existingToast = document.querySelector('.demo-toast');
                 if (existingToast) existingToast.remove();
 
@@ -213,7 +396,140 @@
                 }, 2800);
             }
 
-            // Login action
+            // Evento: Esqueci minha senha
+            if (forgotLink) {
+                forgotLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showForgotForm();
+                });
+            }
+
+            // Evento: Voltar para o login (do formulário de recuperação)
+            if (backToLoginBtn) {
+                backToLoginBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showLoginForm();
+                });
+            }
+
+            // Evento: Não tenho uma conta ainda -> mostra cadastro
+            if (signupBtn) {
+                signupBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showRegisterForm();
+                });
+            }
+
+            // Evento: Voltar para o login (do formulário de cadastro)
+            if (backToLoginFromRegister) {
+                backToLoginFromRegister.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showLoginForm();
+                });
+            }
+
+            // Lógica de envio do link de recuperação
+            if (sendRecoveryBtn) {
+                sendRecoveryBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const recoveryEmail = recoveryEmailInput.value.trim();
+
+                    if (!recoveryEmail) {
+                        showMessage('Por favor, informe o e-mail cadastrado.', true);
+                        recoveryEmailInput.focus();
+                        return;
+                    }
+                    if (!recoveryEmail.includes('@') || !recoveryEmail.includes('.')) {
+                        showMessage('Por favor, informe um e-mail válido (exemplo: usuario@dominio.com).', true);
+                        recoveryEmailInput.focus();
+                        return;
+                    }
+
+                    showMessage(`✨ Instruções de recuperação enviadas para ${recoveryEmail}. Verifique sua caixa de entrada (modo demonstração).`, false);
+                    
+                    recoveryEmailInput.value = '';
+                    setTimeout(() => {
+                        showLoginForm();
+                        showMessage('📧 Volte ao login após verificar seu e-mail.', false);
+                    }, 2000);
+                });
+            }
+
+            // Suporte para tecla "Enter" no campo de email de recuperação
+            if (recoveryEmailInput) {
+                recoveryEmailInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        sendRecoveryBtn.click();
+                    }
+                });
+            }
+
+            // Lógica de cadastro
+            if (registerBtn) {
+                registerBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const name = registerName.value.trim();
+                    const email = registerEmail.value.trim();
+                    const password = registerPassword.value;
+                    const confirmPassword = registerConfirmPassword.value;
+
+                    if (!name) {
+                        showMessage('Por favor, informe seu nome completo.', true);
+                        registerName.focus();
+                        return;
+                    }
+                    if (!email) {
+                        showMessage('Por favor, informe o e-mail.', true);
+                        registerEmail.focus();
+                        return;
+                    }
+                    if (!email.includes('@') || !email.includes('.')) {
+                        showMessage('E-mail inválido. Exemplo: usuario@dominio.com', true);
+                        registerEmail.focus();
+                        return;
+                    }
+                    if (!password) {
+                        showMessage('Por favor, informe uma senha.', true);
+                        registerPassword.focus();
+                        return;
+                    }
+                    if (password.length < 6) {
+                        showMessage('A senha deve ter pelo menos 6 caracteres.', true);
+                        registerPassword.focus();
+                        return;
+                    }
+                    if (password !== confirmPassword) {
+                        showMessage('As senhas não coincidem.', true);
+                        registerConfirmPassword.focus();
+                        return;
+                    }
+
+                    // Simulação de cadastro bem-sucedido
+                    showMessage(`✅ Conta criada com sucesso! Bem-vindo(a), ${name.split(' ')[0]}!`, false);
+                    
+                    // Limpar campos e voltar para o login
+                    setTimeout(() => {
+                        showLoginForm();
+                        showMessage('🎉 Agora você pode fazer login com seu e-mail e senha.', false);
+                    }, 2000);
+                });
+            }
+
+            // Suporte para tecla "Enter" nos campos de cadastro
+            const registerInputs = [registerName, registerEmail, registerPassword, registerConfirmPassword];
+            registerInputs.forEach(input => {
+                if (input) {
+                    input.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            registerBtn.click();
+                        }
+                    });
+                }
+            });
+
+            // Funcionalidades originais do login
             loginBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const email = emailInput.value.trim();
@@ -234,35 +550,15 @@
                     return;
                 }
 
-                // Demo successful login simulation (academic context)
-                // Demo successful login simulation (academic context)
                 showMessage(`Bem-vindo(a), ${email.split('@')[0]}!`, false);
-                // Redirecionar para a página da conta após login bem-sucedido
                 setTimeout(() => {
                     window.location.href = 'conta.html';
-                }, 500); // Pequeno atraso para mostrar a mensagem antes do redirecionamento
+                }, 500);
             });
 
-            // Forgot password link action
-            if (forgotLink) {
-                forgotLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showMessage('🔐 Instruções de recuperação enviadas para o email cadastrado (demonstração).', false);
-                });
-            }
-
-            // Create account button: redirect or show demo message
-            signupBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                // Provide a friendly demo notice and simulate redirection to "agendar.html" or similar? But we keep generic.
-                showMessage('📝 Criar nova conta: funcionalidade em desenvolvimento (projeto acadêmico).', false);
-                // Optionally redirect to a register page if existed, but not required.
-                // Since not specified, we just demonstrate feedback.
-            });
-
-            // Support "Enter" key on form fields to trigger login
-            const inputs = [emailInput, passwordInput];
-            inputs.forEach(input => {
+            // Suporte à tecla Enter nos campos de login
+            const loginInputs = [emailInput, passwordInput];
+            loginInputs.forEach(input => {
                 if (input) {
                     input.addEventListener('keypress', (e) => {
                         if (e.key === 'Enter') {
@@ -275,5 +571,4 @@
         })();
     </script>
 </body>
-
 </html>
