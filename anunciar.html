@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LanHouseSystem - Anunciar</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Additional custom styles to complement Tailwind and maintain theme */
+        body {
+            background-color: black;
+        }
+
+        .header-hover-shadow {
+            transition: text-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .header-hover-shadow:hover {
+            text-shadow: 0 0 8px rgba(255, 215, 175, 0.6);
+            transform: scale(1.01);
+        }
+
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 1.5px;
+            background-color: #c9a87b;
+            transition: width 0.25s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #5a3e2e;
+            border-radius: 4px;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus,
+        button:focus {
+            outline: none;
+            border-color: #c9a87b;
+            box-shadow: 0 0 0 2px rgba(201, 168, 123, 0.3);
+        }
+
+        /* active tab style */
+        .tab-btn.active {
+            background-color: #3d2318;
+            border-bottom: 2px solid #c9a87b;
+            color: #f9e5c1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+
+<body class="bg-black m-0 p-0">
+    <header class="h-[30vh] min-h-[160px] w-full bg-[#2c1810] flex items-center px-6 md:px-12 lg:px-20">
+        <div class="header-container max-w-7xl mx-auto w-full">
+            <h1 class="header-hover-shadow text-white text-3xl sm:text-4xl md:text-5xl tracking-wide cursor-default transition-all duration-300"
+                style="font-family: 'Raleway-Light', 'Segoe UI', 'Helvetica Neue', sans-serif; font-weight: 300;">
+                Lan House System
+            </h1>
+            <nav class="flex gap-6 md:gap-8 items-center">
+                <a href="index.html"
+                    class="nav-link text-gray-200 hover:text-white text-base sm:text-lg transition-colors duration-200"
+                    style="font-family: 'Rationale-Regular', 'Courier New', monospace; letter-spacing: 0.02em;">
+                    HOME
+                </a>
+                <a href="agendar.html"
+                    class="nav-link text-gray-200 hover:text-white text-base sm:text-lg transition-colors duration-200"
+                    style="font-family: 'Rationale-Regular', 'Courier New', monospace; letter-spacing: 0.02em;">
+                    AGENDAR
+                </a>
+                <a href="anunciar.html"
+                    class="nav-link text-gray-200 hover:text-white text-base sm:text-lg transition-colors duration-200"
+                    style="font-family: 'Rationale-Regular', 'Courier New', monospace; letter-spacing: 0.02em;">
+                    ANUNCIE
+                </a>
+                <a href="comps.html"
+                    class="nav-link text-gray-200 hover:text-white text-base sm:text-lg transition-colors duration-200"
+                    style="font-family: 'Rationale-Regular', 'Courier New', monospace; letter-spacing: 0.02em;">
+                    COMPS
+                </a>
+                <a href="login.html"
+                    class="nav-link text-gray-200 hover:text-white text-base sm:text-lg transition-colors duration-200"
+                    style="font-family: 'Rationale-Regular', 'Courier New', monospace; letter-spacing: 0.02em;">
+                    ENTRAR
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-5 md:px-10 py-12">
+        <!-- Tabs for ad types -->
+        <div class="flex flex-wrap gap-3 border-b border-[#3a2a20] pb-4 mb-8">
+            <button data-tab="espaco" class="tab-btn px-6 py-2.5 rounded-t-lg text-gray-200 font-medium transition-all duration-200 bg-[#2c1810] hover:bg-[#3d2a1e] text-base tracking-wide" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">Aluguel de espaço</button>
+            <button data-tab="equipamento" class="tab-btn px-6 py-2.5 rounded-t-lg text-gray-200 font-medium transition-all duration-200 bg-[#2c1810] hover:bg-[#3d2a1e] text-base tracking-wide" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">Aluguel de equipamento</button>
+            <button data-tab="lanhouse" class="tab-btn px-6 py-2.5 rounded-t-lg text-gray-200 font-medium transition-all duration-200 bg-[#2c1810] hover:bg-[#3d2a1e] text-base tracking-wide" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">Lan house</button>
+            <button data-tab="campeonato" class="tab-btn px-6 py-2.5 rounded-t-lg text-gray-200 font-medium transition-all duration-200 bg-[#2c1810] hover:bg-[#3d2a1e] text-base tracking-wide" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">Campeonato</button>
+        </div>
+
+        <!-- Tab content: each form in a separate container -->
+        <!-- Aluguel de espaço -->
+        <div id="espaco" class="tab-pane">
+            <div class="bg-[#0c0c0c] rounded-2xl p-6 md:p-8 border border-[#2a2a2a] shadow-xl">
+                <h2 class="text-2xl md:text-3xl text-white mb-6 border-l-4 border-[#c9a87b] pl-4" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">Anunciar espaço</h2>
+                <div class="space-y-5 max-w-2xl mx-auto">
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Endereço</label>
+                        <input type="text" placeholder="Rua, número, bairro, cidade - UF" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Telefone</label>
+                        <input type="tel" placeholder="(00) 00000-0000" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Fotos (máx. 3)</label>
+                        <input type="file" accept="image/*" multiple class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-2.5 text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-[#2c1810] file:text-white hover:file:bg-[#3d2a1e]">
+                        <p class="text-gray-500 text-xs mt-1">Selecione até 3 imagens</p>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Preço (R$/hora)</label>
+                        <input type="number" step="0.01" placeholder="0.00" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Título</label>
+                        <input type="text" placeholder="Título do anúncio" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Descrição</label>
+                        <textarea rows="4" placeholder="Descreva o espaço, comodidades, regras..." class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200"></textarea>
+                    </div>
+                    <button class="w-full bg-[#2c1810] hover:bg-[#4a2c1c] text-white font-semibold py-3 rounded-full transition-all duration-200 shadow-md">Enviar anúncio</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aluguel de equipamento -->
+        <div id="equipamento" class="tab-pane hidden">
+            <div class="bg-[#0c0c0c] rounded-2xl p-6 md:p-8 border border-[#2a2a2a] shadow-xl">
+                <h2 class="text-2xl md:text-3xl text-white mb-6 border-l-4 border-[#c9a87b] pl-4" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">Anunciar equipamento</h2>
+                <div class="space-y-5 max-w-2xl mx-auto">
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Região</label>
+                        <input type="text" placeholder="Cidade / Estado" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Telefone</label>
+                        <input type="tel" placeholder="(00) 00000-0000" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Fotos (máx. 3)</label>
+                        <input type="file" accept="image/*" multiple class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-2.5 text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-[#2c1810] file:text-white hover:file:bg-[#3d2a1e]">
+                        <p class="text-gray-500 text-xs mt-1">Selecione até 3 imagens</p>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Preço (R$/dia)</label>
+                        <input type="number" step="0.01" placeholder="0.00" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Título</label>
+                        <input type="text" placeholder="Ex: Kit Gamer - Teclado, Mouse e Headset" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Descrição</label>
+                        <textarea rows="4" placeholder="Descreva os equipamentos, marcas, estado de conservação..." class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200"></textarea>
+                    </div>
+                    <button class="w-full bg-[#2c1810] hover:bg-[#4a2c1c] text-white font-semibold py-3 rounded-full transition-all duration-200 shadow-md">Enviar anúncio</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lan house -->
+        <div id="lanhouse" class="tab-pane hidden">
+            <div class="bg-[#0c0c0c] rounded-2xl p-6 md:p-8 border border-[#2a2a2a] shadow-xl">
+                <h2 class="text-2xl md:text-3xl text-white mb-6 border-l-4 border-[#c9a87b] pl-4" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">Anunciar lan house</h2>
+                <div class="space-y-5 max-w-2xl mx-auto">
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Região</label>
+                        <input type="text" placeholder="Cidade / Estado" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Telefone</label>
+                        <input type="tel" placeholder="(00) 00000-0000" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Fotos (máx. 3)</label>
+                        <input type="file" accept="image/*" multiple class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-2.5 text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-[#2c1810] file:text-white hover:file:bg-[#3d2a1e]">
+                        <p class="text-gray-500 text-xs mt-1">Selecione até 3 imagens</p>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Preço por hora</label>
+                        <input type="number" step="0.01" placeholder="0.00" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Título</label>
+                        <input type="text" placeholder="Nome da lan house" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Descrição</label>
+                        <textarea rows="4" placeholder="Descreva a estrutura, jogos disponíveis, comodidades..." class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Tipo de público</label>
+                        <select class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                            <option value="all">Todos os tipos</option>
+                            <option value="pro">Times profissionais (+6 pessoas obrigatório)</option>
+                            <option value="amador">Times amadores (+5 pessoas obrigatório)</option>
+                            <option value="corujao">Amigos para corujão ou jogatinas (+4 pessoas obrigatório)</option>
+                            <option value="outros">Outros (Entrar em equipes, Jogar sozinho ou em menos de 4 pessoas)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Quantidade de espaços</label>
+                        <input type="number" placeholder="Número de computadores / estações" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <button class="w-full bg-[#2c1810] hover:bg-[#4a2c1c] text-white font-semibold py-3 rounded-full transition-all duration-200 shadow-md">Enviar anúncio</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campeonato -->
+        <div id="campeonato" class="tab-pane hidden">
+            <div class="bg-[#0c0c0c] rounded-2xl p-6 md:p-8 border border-[#2a2a2a] shadow-xl">
+                <h2 class="text-2xl md:text-3xl text-white mb-6 border-l-4 border-[#c9a87b] pl-4" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">Anunciar campeonato</h2>
+                <div class="space-y-5 max-w-2xl mx-auto">
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Endereço (pode ser vazio caso seja online)</label>
+                        <input type="text" placeholder="Local físico ou deixe em branco para online" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Telefone</label>
+                        <input type="tel" placeholder="(00) 00000-0000" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Jogo</label>
+                        <select class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                            <option>Counter-Strike 2</option>
+                            <option>Valorant</option>
+                            <option>League of Legends</option>
+                            <option>Dota 2</option>
+                            <option>Fortnite</option>
+                            <option>Outro</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Recompensas</label>
+                        <input type="text" placeholder="Prêmios, premiação em dinheiro, periféricos..." class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Título</label>
+                        <input type="text" placeholder="Nome do campeonato" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Descrição</label>
+                        <textarea rows="4" placeholder="Regras, formato, datas, inscrições..." class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Categoria</label>
+                        <select class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                            <option value="pro">Pro Nacional</option>
+                            <option value="regional">Regional</option>
+                            <option value="online">Online</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Quantidade de vagas</label>
+                        <input type="number" placeholder="Número máximo de equipes" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Times abertos ou fechados</label>
+                        <div class="flex gap-4">
+                            <label class="inline-flex items-center text-gray-300"><input type="radio" name="teamType" value="aberto" class="mr-2"> Abertos (qualquer um pode inscrever time)</label>
+                            <label class="inline-flex items-center text-gray-300"><input type="radio" name="teamType" value="fechado" class="mr-2"> Fechados (apenas convidados)</label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Quantidade por time</label>
+                        <input type="number" placeholder="Número de jogadores por equipe" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Discord</label>
+                        <input type="text" placeholder="Link do servidor Discord" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Outras redes</label>
+                        <input type="text" placeholder="Instagram, Twitter, etc." class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <button class="w-full bg-[#2c1810] hover:bg-[#4a2c1c] text-white font-semibold py-3 rounded-full transition-all duration-200 shadow-md">Enviar anúncio</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="w-full bg-[#1e1e1e] h-auto py-12 flex items-center justify-center px-6 text-center">
+        <p class="text-gray-400 text-sm md:text-base font-sans tracking-wide">
+            UNIFECAF - 2026, TODOS OS DIREITOS RESERVADOS. - PROJETO EXCLUSIVAMENTE DEMONSTRATIVO E ACADÊMICO.
+        </p>
+    </footer>
+
+    <script>
+        // Tab switching logic
+        const tabs = document.querySelectorAll('.tab-btn');
+        const panes = {
+            espaco: document.getElementById('espaco'),
+            equipamento: document.getElementById('equipamento'),
+            lanhouse: document.getElementById('lanhouse'),
+            campeonato: document.getElementById('campeonato')
+        };
+
+        function activateTab(tabId) {
+            // Hide all panes
+            Object.values(panes).forEach(pane => pane.classList.add('hidden'));
+            // Show selected pane
+            if (panes[tabId]) panes[tabId].classList.remove('hidden');
+            // Update button active styles
+            tabs.forEach(btn => {
+                const btnTab = btn.getAttribute('data-tab');
+                if (btnTab === tabId) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        tabs.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.getAttribute('data-tab');
+                if (tabId && panes[tabId]) activateTab(tabId);
+            });
+        });
+
+        // Activate first tab by default
+        activateTab('espaco');
+
+        // File input limit (max 3 files)
+        const fileInputs = document.querySelectorAll('input[type="file"][multiple]');
+        fileInputs.forEach(input => {
+            input.addEventListener('change', function(e) {
+                if (this.files.length > 3) {
+                    alert('Máximo de 3 arquivos permitidos.');
+                    this.value = '';
+                }
+            });
+        });
+
+        // Form submission simulation
+        const forms = document.querySelectorAll('.tab-pane button');
+        forms.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Anúncio enviado com sucesso! (versão demonstrativa)');
+                // Optionally clear form fields here
+            });
+        });
+    </script>
+</body>
+
+</html>

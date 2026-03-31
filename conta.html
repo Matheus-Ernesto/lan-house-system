@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>LanHouseSystem - Minha Conta</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        /* custom transitions and scrollbar to match rustic theme */
+        body {
+            background-color: black;
+        }
+
+        .header-hover-shadow {
+            transition: text-shadow 0.3s ease, transform 0.3s ease;
+        }
+        .header-hover-shadow:hover {
+            text-shadow: 0 0 8px rgba(255, 215, 175, 0.6);
+            transform: scale(1.01);
+        }
+
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 1.5px;
+            background-color: #c9a87b;
+            transition: width 0.25s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #5a3e2e;
+            border-radius: 4px;
+        }
+
+        /* tab buttons active style */
+        .tab-btn.active {
+            background-color: #3d2318;
+            border-bottom: 2px solid #c9a87b;
+            color: #f9e5c1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        /* form inputs focus */
+        input:focus, select:focus {
+            outline: none;
+            border-color: #c9a87b;
+            box-shadow: 0 0 0 2px rgba(201, 168, 123, 0.3);
+        }
+
+        /* placeholder style - darker and semi-transparent */
+        input::placeholder, select::placeholder {
+            color: #4a4a4a;
+            opacity: 0.7;
+        }
+
+        /* smooth transitions for tabs content */
+        .tab-pane {
+            transition: opacity 0.2s ease;
+        }
+        
+        /* custom card styling for lists */
+        .list-card {
+            background: #111111;
+            transition: all 0.2s;
+            border-left: 3px solid #5a3e2e;
+        }
+        .list-card:hover {
+            background: #1a1a1a;
+            transform: translateX(4px);
+        }
+
+        .delete-btn {
+            transition: all 0.2s;
+        }
+        .delete-btn:hover {
+            background-color: #7a1f1f;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="bg-black m-0 p-0 antialiased">
+
+    <!-- ========== HEADER (exatamente igual ao index) ========== -->
+    <header class="h-[30vh] min-h-[160px] w-full bg-[#2c1810] flex items-center px-6 md:px-12 lg:px-20">
+        <div class="header-container max-w-7xl mx-auto w-full">
+            <h1 class="header-hover-shadow text-white text-3xl sm:text-4xl md:text-5xl tracking-wide cursor-default transition-all duration-300"
+                style="font-family: 'Raleway-Light', 'Segoe UI', 'Helvetica Neue', sans-serif; font-weight: 300;">
+                Lan House System
+            </h1>
+            <nav class="flex gap-6 md:gap-8 items-center">
+                <a href="index.html"
+                    class="nav-link text-gray-200 hover:text-white text-base sm:text-lg transition-colors duration-200"
+                    style="font-family: 'Rationale-Regular', 'Courier New', monospace; letter-spacing: 0.02em;">
+                    HOME
+                </a>
+                <a href="agendar.html"
+                    class="nav-link text-gray-200 hover:text-white text-base sm:text-lg transition-colors duration-200"
+                    style="font-family: 'Rationale-Regular', 'Courier New', monospace; letter-spacing: 0.02em;">
+                    AGENDAR
+                </a>
+                <a href="anunciar.html"
+                    class="nav-link text-gray-200 hover:text-white text-base sm:text-lg transition-colors duration-200"
+                    style="font-family: 'Rationale-Regular', 'Courier New', monospace; letter-spacing: 0.02em;">
+                    ANUNCIE
+                </a>
+                <a href="comps.html"
+                    class="nav-link text-gray-200 hover:text-white text-base sm:text-lg transition-colors duration-200"
+                    style="font-family: 'Rationale-Regular', 'Courier New', monospace; letter-spacing: 0.02em;">
+                    COMPS
+                </a>
+                <a href="login.html"
+                    class="nav-link text-gray-200 hover:text-white text-base sm:text-lg transition-colors duration-200"
+                    style="font-family: 'Rationale-Regular', 'Courier New', monospace; letter-spacing: 0.02em;">
+                    ENTRAR
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ========== MAIN DASHBOARD: TABS + CONTEÚDO ========== -->
+    <main class="max-w-6xl mx-auto px-5 md:px-10 lg:px-6 py-12">
+        
+        <!-- TABS (abas principais - sem emojis) -->
+        <div class="flex flex-wrap gap-2 sm:gap-4 border-b border-[#3a2a20] pb-3 mb-10">
+            <button data-tab="loginTab" class="tab-btn px-6 py-2.5 rounded-t-lg text-gray-200 font-medium transition-all duration-200 bg-[#2c1810] hover:bg-[#3d2a1e] text-base tracking-wide" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">DADOS PESSOAIS</button>
+            <button data-tab="anunciosTab" class="tab-btn px-6 py-2.5 rounded-t-lg text-gray-200 font-medium transition-all duration-200 bg-[#2c1810] hover:bg-[#3d2a1e] text-base tracking-wide" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">MEUS ANÚNCIOS</button>
+            <button data-tab="agendamentosTab" class="tab-btn px-6 py-2.5 rounded-t-lg text-gray-200 font-medium transition-all duration-200 bg-[#2c1810] hover:bg-[#3d2a1e] text-base tracking-wide" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">AGENDAMENTOS</button>
+            <button data-tab="eventosTab" class="tab-btn px-6 py-2.5 rounded-t-lg text-gray-200 font-medium transition-all duration-200 bg-[#2c1810] hover:bg-[#3d2a1e] text-base tracking-wide" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">EVENTOS</button>
+            <button data-tab="outrosTab" class="tab-btn px-6 py-2.5 rounded-t-lg text-gray-200 font-medium transition-all duration-200 bg-[#2c1810] hover:bg-[#3d2a1e] text-base tracking-wide" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">OUTROS</button>
+        </div>
+
+        <!-- ======================== PANE 1: DADOS PESSOAIS ======================== -->
+        <div id="loginTab" class="tab-pane transition-all">
+            <div class="bg-[#0c0c0c] rounded-2xl p-6 md:p-8 border border-[#2a2a2a] shadow-xl">
+                <h2 class="text-2xl md:text-3xl text-white mb-6 border-l-4 border-[#c9a87b] pl-4" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">Informações da conta</h2>
+                <div class="max-w-2xl mx-auto space-y-5">
+                    <!-- E-mail -->
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-left text-sm font-semibold tracking-wide">E-MAIL</label>
+                        <input type="email" id="userEmail" placeholder="seu@email.com" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200 focus:border-[#c9a87b] transition">
+                    </div>
+                    <!-- Senha -->
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-left text-sm font-semibold tracking-wide">SENHA</label>
+                        <input type="password" id="userPassword"  placeholder="••••••••" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <!-- Nome completo -->
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-left text-sm font-semibold tracking-wide">NOME COMPLETO</label>
+                        <input type="text" id="userName" placeholder="Nome completo" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <!-- Telefone -->
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-left text-sm font-semibold tracking-wide">TELEFONE</label>
+                        <input type="tel" id="userPhone" placeholder="(00) 00000-0000" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <!-- CPF (com máscara) -->
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-left text-sm font-semibold tracking-wide">CPF</label>
+                        <input type="text" id="userCpf" placeholder="000.000.000-00" maxlength="14" class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200">
+                    </div>
+                    <!-- Localidade (Estado + Cidade lado a lado) -->
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">LOCALIDADE</label>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <select id="userState" class="bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200 w-full sm:w-1/2">
+                                <option value="">Estado</option>
+                                <option value="SP" selected>São Paulo</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="MG">Minas Gerais</option>
+                                <option value="PR">Paraná</option>
+                                <option value="RS">Rio Grande do Sul</option>
+                            </select>
+                            <select id="userCity" class="bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-3 text-gray-200 w-full sm:w-1/2">
+                                <option value="">Cidade</option>
+                                <option value="São Paulo" selected>São Paulo</option>
+                                <option value="Campinas">Campinas</option>
+                                <option value="Santos">Santos</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Botão salvar -->
+                    <div class="pt-4">
+                        <button id="saveProfileBtn" class="bg-[#2c1810] hover:bg-[#4a2c1c] text-white font-semibold px-8 py-3 rounded-full transition-all duration-200 shadow-md w-full sm:w-auto">SALVAR ALTERAÇÕES</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================== PANE 2: ANÚNCIOS ======================== -->
+        <div id="anunciosTab" class="tab-pane hidden transition-all">
+            <div class="bg-[#0c0c0c] rounded-2xl p-6 md:p-8 border border-[#2a2a2a]">
+                <div class="flex justify-between items-center flex-wrap gap-3 mb-6">
+                    <h2 class="text-2xl md:text-3xl text-white" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">Meus Anúncios</h2>
+                    <span id="anunciosCount" class="bg-[#2c1810] text-amber-200 px-4 py-1.5 rounded-full text-sm font-bold">0 anúncios</span>
+                </div>
+                <div id="anunciosList" class="space-y-4">
+                    <!-- lista preenchida dinamicamente via JS -->
+                </div>
+                <button id="addSampleAnuncio" class="mt-6 text-[#c9a87b] border border-[#c9a87b] rounded-full px-5 py-2 hover:bg-[#c9a87b] hover:text-black transition text-sm">+ Adicionar anúncio demonstrativo</button>
+            </div>
+        </div>
+
+        <!-- ======================== PANE 3: AGENDAMENTOS ======================== -->
+        <div id="agendamentosTab" class="tab-pane hidden transition-all">
+            <div class="bg-[#0c0c0c] rounded-2xl p-6 md:p-8 border border-[#2a2a2a]">
+                <div class="flex justify-between items-center flex-wrap gap-3 mb-6">
+                    <h2 class="text-2xl md:text-3xl text-white" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">Agendamentos</h2>
+                    <span id="agendamentosCount" class="bg-[#2c1810] text-amber-200 px-4 py-1.5 rounded-full text-sm font-bold">0 agendamentos</span>
+                </div>
+                <div id="agendamentosList" class="space-y-4"></div>
+                <button id="addSampleAgendamento" class="mt-6 text-[#c9a87b] border border-[#c9a87b] rounded-full px-5 py-2 hover:bg-[#c9a87b] hover:text-black transition text-sm">+ Simular agendamento</button>
+            </div>
+        </div>
+
+        <!-- ======================== PANE 4: EVENTOS ======================== -->
+        <div id="eventosTab" class="tab-pane hidden transition-all">
+            <div class="bg-[#0c0c0c] rounded-2xl p-6 md:p-8 border border-[#2a2a2a]">
+                <div class="flex justify-between items-center flex-wrap gap-3 mb-6">
+                    <h2 class="text-2xl md:text-3xl text-white" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">Eventos Inscritos</h2>
+                    <span id="eventosCount" class="bg-[#2c1810] text-amber-200 px-4 py-1.5 rounded-full text-sm font-bold">0 eventos</span>
+                </div>
+                <div id="eventosList" class="space-y-4"></div>
+                <button id="addSampleEvento" class="mt-6 text-[#c9a87b] border border-[#c9a87b] rounded-full px-5 py-2 hover:bg-[#c9a87b] hover:text-black transition text-sm">+ Participar de evento (demo)</button>
+            </div>
+        </div>
+
+        <!-- ======================== PANE 5: OUTROS (Ajuda, FAQ, Contato, Deletar) ======================== -->
+        <div id="outrosTab" class="tab-pane hidden transition-all">
+            <div class="bg-[#0c0c0c] rounded-2xl p-6 md:p-8 border border-[#2a2a2a]">
+                <h2 class="text-2xl md:text-3xl text-white mb-8" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">Central da Conta</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="bg-[#141414] p-5 rounded-xl border border-[#2c2c2c] hover:border-[#c9a87b] transition">
+                        <h3 class="text-xl text-[#e2c8a7] mb-2">Ajuda</h3>
+                        <p class="text-gray-400 text-sm">Dúvidas sobre agendamentos, campeonatos ou anúncios? Acesse nosso centro de suporte.</p>
+                        <button class="mt-3 text-[#c9a87b] text-sm underline">Ir para ajuda →</button>
+                    </div>
+                    <div class="bg-[#141414] p-5 rounded-xl border border-[#2c2c2c] hover:border-[#c9a87b] transition">
+                        <h3 class="text-xl text-[#e2c8a7] mb-2">FAQ</h3>
+                        <p class="text-gray-400 text-sm">Perguntas frequentes: como cancelar reservas, valores de torneios e muito mais.</p>
+                        <button class="mt-3 text-[#c9a87b] text-sm underline">Ver perguntas →</button>
+                    </div>
+                    <div class="bg-[#141414] p-5 rounded-xl border border-[#2c2c2c] hover:border-[#c9a87b] transition">
+                        <h3 class="text-xl text-[#e2c8a7] mb-2">Contato</h3>
+                        <p class="text-gray-400 text-sm">Fale com nossa equipe: suporte@lanhousesystem.com.br ou (11) 4002-8922</p>
+                        <button class="mt-3 text-[#c9a87b] text-sm underline">Enviar mensagem →</button>
+                    </div>
+                    <div class="bg-[#141414] p-5 rounded-xl border border-[#2c2c2c] hover:border-red-800 transition">
+                        <h3 class="text-xl text-red-400 mb-2">Deletar Conta</h3>
+                        <p class="text-gray-400 text-sm">Remova permanentemente seus dados e anúncios. Ação irreversível.</p>
+                        <button id="deleteAccountBtn" class="mt-3 delete-btn bg-red-950/50 text-red-300 border border-red-800 px-5 py-1.5 rounded-full text-sm hover:bg-red-900 transition">Solicitar exclusão</button>
+                    </div>
+                </div>
+                <div class="mt-10 pt-6 border-t border-[#2a2a2a] text-center text-gray-500 text-xs">
+                    <p>UNIFECAF - Área do usuário • Versão demonstrativa</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="w-full bg-[#1e1e1e] h-auto py-12 flex items-center justify-center px-6 text-center mt-12">
+        <p class="text-gray-400 text-sm md:text-base font-sans tracking-wide">
+            UNIFECAF - 2026, TODOS OS DIREITOS RESERVADOS. - PROJETO EXCLUSIVAMENTE DEMONSTRATIVO E ACADÊMICO.
+        </p>
+    </footer>
+
+    <script>
+        // ========== MÁSCARA DE CPF ==========
+        function applyCpfMask(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+            if (value.length <= 3) input.value = value;
+            else if (value.length <= 6) input.value = value.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+            else if (value.length <= 9) input.value = value.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+            else input.value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+        }
+        const cpfInput = document.getElementById('userCpf');
+        if(cpfInput) {
+            cpfInput.addEventListener('input', () => applyCpfMask(cpfInput));
+            applyCpfMask(cpfInput);
+        }
+
+        // ========== ESTADO + CIDADE DINÂMICO ==========
+        const stateSelect = document.getElementById('userState');
+        const citySelect = document.getElementById('userCity');
+        const citiesByState = {
+            SP: ['São Paulo', 'Campinas', 'Santos', 'Ribeirão Preto', 'Sorocaba'],
+            RJ: ['Rio de Janeiro', 'Niterói', 'Petrópolis', 'Volta Redonda', 'Campos'],
+            MG: ['Belo Horizonte', 'Uberlândia', 'Contagem', 'Juiz de Fora', 'Ouro Preto'],
+            PR: ['Curitiba', 'Londrina', 'Maringá', 'Ponta Grossa', 'Cascavel'],
+            RS: ['Porto Alegre', 'Caxias do Sul', 'Pelotas', 'Canoas', 'Santa Maria']
+        };
+        function updateCities() {
+            const selectedState = stateSelect.value;
+            citySelect.innerHTML = '<option value="">Cidade</option>';
+            if(selectedState && citiesByState[selectedState]) {
+                citiesByState[selectedState].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+                if(selectedState === 'SP') citySelect.value = 'São Paulo';
+                else citySelect.value = citiesByState[selectedState][0];
+            }
+        }
+        if(stateSelect) {
+            stateSelect.addEventListener('change', updateCities);
+            updateCities(); // inicial
+        }
+
+        // ========== DADOS MOCK (sem emojis) ==========
+        let anuncios = [
+            { id: 1, titulo: "Setup Gamer i7 + RTX 3060", descricao: "Alugo equipamento para torneios, 12h/dia", data: "10/04/2025" },
+            { id: 2, titulo: "Espaço para treino em equipe", descricao: "Sala com 5 computadores, ideal para times", data: "15/04/2025" }
+        ];
+        let agendamentos = [
+            { id: 1, tipo: "Corujão com amigos", local: "Lan House Central", data: "20/04 - 22h", status: "Confirmado" },
+            { id: 2, tipo: "Treino profissional", local: "Arena Geek", data: "25/04 - 14h", status: "Pendente" }
+        ];
+        let eventos = [
+            { id: 1, nome: "Liga Universitária de Valorant", data: "05/05/2025", premio: "R$ 2.000", inscrito: true },
+            { id: 2, nome: "CS2 Amadores Cup", data: "12/05/2025", premio: "Periféricos", inscrito: true }
+        ];
+
+        // Funções para renderizar cada lista e atualizar contadores
+        function renderAnuncios() {
+            const container = document.getElementById('anunciosList');
+            const countSpan = document.getElementById('anunciosCount');
+            if(!container) return;
+            if(anuncios.length === 0) {
+                container.innerHTML = '<div class="text-gray-500 text-center py-8 bg-[#0f0f0f] rounded-xl">Nenhum anúncio publicado. Clique em "Adicionar anúncio" para criar um.</div>';
+                countSpan.innerText = `0 anúncios`;
+                return;
+            }
+            container.innerHTML = anuncios.map(anuncio => `
+                <div class="list-card bg-[#111] p-4 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                    <div>
+                        <h3 class="text-white text-lg font-semibold">${anuncio.titulo}</h3>
+                        <p class="text-gray-400 text-sm">${anuncio.descricao}</p>
+                        <span class="text-xs text-[#c9a87b]">${anuncio.data}</span>
+                    </div>
+                    <button onclick="removerAnuncio(${anuncio.id})" class="text-red-400 text-sm border border-red-800 px-3 py-1 rounded-full hover:bg-red-900/40 transition">Remover</button>
+                </div>
+            `).join('');
+            countSpan.innerText = `${anuncios.length} anúncio${anuncios.length !== 1 ? 's' : ''}`;
+        }
+
+        function renderAgendamentos() {
+            const container = document.getElementById('agendamentosList');
+            const countSpan = document.getElementById('agendamentosCount');
+            if(!container) return;
+            if(agendamentos.length === 0) {
+                container.innerHTML = '<div class="text-gray-500 text-center py-8 bg-[#0f0f0f] rounded-xl">Nenhum agendamento encontrado. Simule uma reserva.</div>';
+                countSpan.innerText = `0 agendamentos`;
+                return;
+            }
+            container.innerHTML = agendamentos.map(ag => `
+                <div class="list-card bg-[#111] p-4 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div>
+                        <h3 class="text-white text-lg">${ag.tipo}</h3>
+                        <p class="text-gray-400 text-sm">${ag.local} • ${ag.data}</p>
+                        <span class="inline-block mt-1 text-xs px-2 py-0.5 rounded-full ${ag.status === 'Confirmado' ? 'bg-green-900 text-green-300' : 'bg-yellow-900 text-yellow-300'}">${ag.status}</span>
+                    </div>
+                    <button onclick="removerAgendamento(${ag.id})" class="text-red-400 text-sm border border-red-800 px-3 py-1 rounded-full mt-2 md:mt-0 hover:bg-red-900/40">Cancelar</button>
+                </div>
+            `).join('');
+            countSpan.innerText = `${agendamentos.length} agendamento${agendamentos.length !== 1 ? 's' : ''}`;
+        }
+
+        function renderEventos() {
+            const container = document.getElementById('eventosList');
+            const countSpan = document.getElementById('eventosCount');
+            if(!container) return;
+            if(eventos.length === 0) {
+                container.innerHTML = '<div class="text-gray-500 text-center py-8 bg-[#0f0f0f] rounded-xl">Nenhum evento inscrito. Participe de campeonatos!</div>';
+                countSpan.innerText = `0 eventos`;
+                return;
+            }
+            container.innerHTML = eventos.map(ev => `
+                <div class="list-card bg-[#111] p-4 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div>
+                        <h3 class="text-white text-lg">${ev.nome}</h3>
+                        <p class="text-gray-400 text-sm">${ev.data} • ${ev.premio}</p>
+                        <span class="text-xs text-green-400">✓ Inscrito</span>
+                    </div>
+                    <button onclick="removerEvento(${ev.id})" class="text-red-400 text-sm border border-red-800 px-3 py-1 rounded-full hover:bg-red-900/40">Cancelar inscrição</button>
+                </div>
+            `).join('');
+            countSpan.innerText = `${eventos.length} evento${eventos.length !== 1 ? 's' : ''}`;
+        }
+
+        // funções globais para remoção
+        window.removerAnuncio = (id) => {
+            anuncios = anuncios.filter(a => a.id !== id);
+            renderAnuncios();
+        };
+        window.removerAgendamento = (id) => {
+            agendamentos = agendamentos.filter(a => a.id !== id);
+            renderAgendamentos();
+        };
+        window.removerEvento = (id) => {
+            eventos = eventos.filter(e => e.id !== id);
+            renderEventos();
+        };
+
+        // Adicionar itens de demonstração
+        document.getElementById('addSampleAnuncio')?.addEventListener('click', () => {
+            const newId = Date.now();
+            anuncios.push({ id: newId, titulo: "Novo Anúncio - Setup Gamer", descricao: "Mouse e teclado mecânico + headset", data: new Date().toLocaleDateString() });
+            renderAnuncios();
+        });
+        document.getElementById('addSampleAgendamento')?.addEventListener('click', () => {
+            const newId = Date.now();
+            agendamentos.push({ id: newId, tipo: "Sessão livre com amigos", local: "Lan House Centro", data: "Sábado, 10h", status: "Confirmado" });
+            renderAgendamentos();
+        });
+        document.getElementById('addSampleEvento')?.addEventListener('click', () => {
+            const newId = Date.now();
+            eventos.push({ id: newId, nome: "Campeonato Relâmpago de LOL", data: "30/05/2025", premio: "R$ 500,00", inscrito: true });
+            renderEventos();
+        });
+
+        // Salvar perfil (simulação)
+        document.getElementById('saveProfileBtn')?.addEventListener('click', () => {
+            const email = document.getElementById('userEmail').value;
+            const nome = document.getElementById('userName').value;
+            const telefone = document.getElementById('userPhone').value;
+            const cpf = document.getElementById('userCpf').value;
+            const estado = stateSelect.value;
+            const cidade = citySelect.value;
+            alert(`Perfil atualizado!\nNome: ${nome}\nE-mail: ${email}\nTelefone: ${telefone}\nCPF: ${cpf}\nLocal: ${cidade}/${estado}`);
+        });
+
+        // Deletar conta
+        document.getElementById('deleteAccountBtn')?.addEventListener('click', () => {
+            if(confirm("ATENÇÃO: Essa ação excluirá todos os seus dados, anúncios e agendamentos permanentemente. Tem certeza?")) {
+                alert("Solicitação de exclusão enviada. (ambiente demonstrativo - conta seria deletada)");
+                anuncios = [];
+                agendamentos = [];
+                eventos = [];
+                renderAnuncios();
+                renderAgendamentos();
+                renderEventos();
+            }
+        });
+
+        // ========== SISTEMA DE TABS ==========
+        const tabs = document.querySelectorAll('.tab-btn');
+        const panes = {
+            loginTab: document.getElementById('loginTab'),
+            anunciosTab: document.getElementById('anunciosTab'),
+            agendamentosTab: document.getElementById('agendamentosTab'),
+            eventosTab: document.getElementById('eventosTab'),
+            outrosTab: document.getElementById('outrosTab')
+        };
+        function activateTab(tabId) {
+            Object.values(panes).forEach(pane => { if(pane) pane.classList.add('hidden'); });
+            if(panes[tabId]) panes[tabId].classList.remove('hidden');
+            tabs.forEach(btn => {
+                const btnTarget = btn.getAttribute('data-tab');
+                if(btnTarget === tabId) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+        }
+        tabs.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const tabId = btn.getAttribute('data-tab');
+                if(tabId && panes[tabId]) activateTab(tabId);
+            });
+        });
+        activateTab('loginTab');
+        
+        renderAnuncios();
+        renderAgendamentos();
+        renderEventos();
+
+        if(stateSelect.value === 'SP') citySelect.value = 'São Paulo';
+    </script>
+</body>
+</html>

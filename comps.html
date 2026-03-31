@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LanHouseSystem - Agendar</title>
+    <title>LanHouseSystem - Campeonatos</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="style.css">
     <style>
@@ -110,29 +110,42 @@
 
     <!-- Main content: two columns (filter sidebar + results grid) -->
     <main class="max-w-7xl mx-auto px-4 md:px-8 py-12 flex flex-col lg:flex-row gap-8">
-        <!-- LEFT SIDEBAR - FILTERS (width: 30vw on large screens, but responsive) -->
+        <!-- LEFT SIDEBAR - FILTERS -->
         <aside class="w-full lg:w-[30%] bg-[#0c0c0c] rounded-2xl p-6 border border-[#2a2a2a] shadow-xl h-auto">
             <h3 class="text-2xl text-white mb-6 border-l-4 border-[#c9a87b] pl-4"
                 style="font-family: 'Rationale-Regular', 'Courier New', monospace;">Filtros</h3>
 
-            <!-- Tipo de agendamento -->
+            <!-- Tipo de campeonato -->
             <div class="mb-6">
-                <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Tipo de agendamento</label>
+                <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Tipo de campeonato</label>
                 <select id="typeFilter"
                     class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-2.5 text-gray-200">
                     <option value="all">Todos os tipos</option>
-                    <option value="pro">Times profissionais (+6 pessoas obrigatório)</option>
-                    <option value="amador">Times amadores (+5 pessoas obrigatório)</option>
-                    <option value="corujao">Amigos para corujão ou jogatinas (+4 pessoas obrigatório)</option>
-                    <option value="outros">Outros (Entrar em equipes, Jogar sozinho ou em menos de 4 pessoas)</option>
+                    <option value="pro">Pro Nacional</option>
+                    <option value="regional">Regional</option>
+                    <option value="online">Online</option>
                 </select>
             </div>
 
-            <!-- Data -->
+            <!-- Jogo -->
             <div class="mb-6">
-                <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Data</label>
+                <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Jogo</label>
+                <select id="gameFilter"
+                    class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-2.5 text-gray-200">
+                    <option value="all">Todos os jogos</option>
+                    <option value="CS2">Counter-Strike 2</option>
+                    <option value="Valorant">Valorant</option>
+                    <option value="LOL">League of Legends</option>
+                    <option value="Dota2">Dota 2</option>
+                    <option value="Fortnite">Fortnite</option>
+                </select>
+            </div>
+
+            <!-- Data (a partir de) -->
+            <div class="mb-6">
+                <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Data (a partir de)</label>
                 <input type="date" id="dateFilter"
-                    class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-2.5 text-gray-200" value="">
+                    class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-2.5 text-gray-200">
             </div>
 
             <!-- Região (Estado + Cidade) -->
@@ -155,28 +168,25 @@
                 </div>
             </div>
 
-            <!-- Preço (min/max) -->
+            <!-- Prêmio (min/max) -->
             <div class="mb-8">
-                <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Preço (R$/hora)</label>
+                <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Prêmio (R$)</label>
                 <div class="flex gap-3">
-                    <select id="priceMin"
+                    <select id="prizeMin"
                         class="bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-2.5 text-gray-200 w-1/2">
                         <option value="0">Mínimo</option>
-                        <option value="5">R$ 5</option>
-                        <option value="10">R$ 10</option>
-                        <option value="15">R$ 15</option>
-                        <option value="20">R$ 20</option>
-                        <option value="25">R$ 25</option>
+                        <option value="100">R$ 100</option>
+                        <option value="500">R$ 500</option>
+                        <option value="1000">R$ 1.000</option>
+                        <option value="5000">R$ 5.000</option>
                     </select>
-                    <select id="priceMax"
+                    <select id="prizeMax"
                         class="bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-2.5 text-gray-200 w-1/2">
-                        <option value="999">Máximo</option>
-                        <option value="10">R$ 10</option>
-                        <option value="15">R$ 15</option>
-                        <option value="20">R$ 20</option>
-                        <option value="25">R$ 25</option>
-                        <option value="30">R$ 30</option>
-                        <option value="50">R$ 50</option>
+                        <option value="999999">Máximo</option>
+                        <option value="500">R$ 500</option>
+                        <option value="1000">R$ 1.000</option>
+                        <option value="5000">R$ 5.000</option>
+                        <option value="10000">R$ 10.000</option>
                     </select>
                 </div>
             </div>
@@ -188,12 +198,10 @@
         <!-- RIGHT SIDE - RESULTS GRID -->
         <section class="w-full lg:w-[70%]">
             <div class="flex justify-between items-center mb-6 flex-wrap gap-3">
-                <h3 class="text-2xl text-white" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">Lan
-                    houses disponíveis</h3>
-                <span id="resultsCount" class="bg-[#2c1810] text-amber-200 px-4 py-1.5 rounded-full text-sm font-bold">0
-                    estabelecimentos</span>
+                <h3 class="text-2xl text-white" style="font-family: 'Rationale-Regular', 'Courier New', monospace;">Campeonatos disponíveis</h3>
+                <span id="resultsCount" class="bg-[#2c1810] text-amber-200 px-4 py-1.5 rounded-full text-sm font-bold">0 campeonatos</span>
             </div>
-            <div id="lanHousesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="championshipsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- dynamic cards will appear here -->
             </div>
         </section>
@@ -206,20 +214,15 @@
     </footer>
 
     <script>
-        // Mock data for lan houses (each object represents an establishment)
-        const lanHousesData = [
-            { id: 1, name: "Arena Gamer SP", type: "pro", state: "SP", city: "São Paulo", price: 25, image: "https://picsum.photos/id/1/400/300", description: "Estrutura profissional com PCs de alto desempenho." },
-            { id: 2, name: "Byte & Battle", type: "amador", state: "SP", city: "Campinas", price: 15, image: "https://picsum.photos/id/2/400/300", description: "Ambiente amigável para times amadores." },
-            { id: 3, name: "Noite Gamer", type: "corujao", state: "RJ", city: "Rio de Janeiro", price: 12, image: "https://picsum.photos/id/3/400/300", description: "Corujão com descontos especiais." },
-            { id: 4, name: "Solo Leveling", type: "outros", state: "MG", city: "Belo Horizonte", price: 10, image: "https://picsum.photos/id/4/400/300", description: "Perfeito para quem joga sozinho ou em dupla." },
-            { id: 5, name: "Team Pro House", type: "pro", state: "SP", city: "São Paulo", price: 30, image: "https://picsum.photos/id/5/400/300", description: "Treinamentos profissionais e equipamentos top." },
-            { id: 6, name: "Amigos Play", type: "corujao", state: "PR", city: "Curitiba", price: 14, image: "https://picsum.photos/id/6/400/300", description: "Ideal para grupos de amigos." },
-            { id: 7, name: "Clã Arena", type: "amador", state: "RS", city: "Porto Alegre", price: 18, image: "https://picsum.photos/id/7/400/300", description: "Torneios amadores toda semana." },
-            { id: 8, name: "Free Agents Hub", type: "outros", state: "SP", city: "Santos", price: 8, image: "https://picsum.photos/id/8/400/300", description: "Espaço para encontrar equipes e jogar." },
-            { id: 9, name: "Night Owls", type: "corujao", state: "RJ", city: "Niterói", price: 10, image: "https://picsum.photos/id/9/400/300", description: "Corujão até o amanhecer." },
-            { id: 10, name: "Elite Gaming", type: "pro", state: "MG", city: "Uberlândia", price: 28, image: "https://picsum.photos/id/10/400/300", description: "Equipamentos de competição." },
-            { id: 11, name: "Lan House Central", type: "amador", state: "PR", city: "Londrina", price: 12, image: "https://picsum.photos/id/11/400/300", description: "Ambiente familiar e descontos para grupos." },
-            { id: 12, name: "Solo Station", type: "outros", state: "RS", city: "Caxias do Sul", price: 9, image: "https://picsum.photos/id/12/400/300", description: "Estaçõs individuais para jogadores casuais." }
+        // Mock data for championships
+        const championshipsData = [
+            { id: 1, name: "Liga Paulista de CS2", type: "regional", game: "CS2", state: "SP", city: "São Paulo", date: "2025-05-15", prize: 5000, image: "https://picsum.photos/id/15/400/300", description: "Campeonato regional com grandes premiações." },
+            { id: 2, name: "Valorant Pro Series", type: "pro", game: "Valorant", state: "SP", city: "Campinas", date: "2025-06-01", prize: 10000, image: "https://picsum.photos/id/16/400/300", description: "Circuito profissional nacional." },
+            { id: 3, name: "LOL Cup Online", type: "online", game: "LOL", state: "", city: "", date: "2025-05-20", prize: 2000, image: "https://picsum.photos/id/17/400/300", description: "Torneio online aberto para todos." },
+            { id: 4, name: "Dota 2 Masters", type: "pro", game: "Dota2", state: "RJ", city: "Rio de Janeiro", date: "2025-07-10", prize: 15000, image: "https://picsum.photos/id/18/400/300", description: "Evento presencial no Rio." },
+            { id: 5, name: "Fortnite Solo Showdown", type: "online", game: "Fortnite", state: "", city: "", date: "2025-05-25", prize: 3000, image: "https://picsum.photos/id/19/400/300", description: "Batalha solo com prêmios." },
+            { id: 6, name: "Campeonato Sul de Valorant", type: "regional", game: "Valorant", state: "RS", city: "Porto Alegre", date: "2025-08-05", prize: 4000, image: "https://picsum.photos/id/20/400/300", description: "Região sul em destaque." },
+            { id: 7, name: "CS2 Amador Cup", type: "regional", game: "CS2", state: "MG", city: "Belo Horizonte", date: "2025-06-15", prize: 1500, image: "https://picsum.photos/id/21/400/300", description: "Para times amadores." }
         ];
 
         // Helper: populate city dropdown based on selected state
@@ -246,66 +249,51 @@
             }
         }
         stateSelect.addEventListener('change', updateCities);
-        updateCities(); // initial call
+        updateCities();
 
-        // URL parameter handling for type filter (?type=0,1,2,3)
-        const urlParams = new URLSearchParams(window.location.search);
-        const typeParam = urlParams.get('type');
-        if (typeParam !== null) {
-            const typeSelect = document.getElementById('typeFilter');
-            const mapping = {
-                '0': 'pro',
-                '1': 'amador',
-                '2': 'corujao',
-                '3': 'outros'
-            };
-            if (mapping[typeParam]) {
-                typeSelect.value = mapping[typeParam];
-            }
-        }
+        // Filter function
+        function filterChampionships() {
+            const type = document.getElementById('typeFilter').value;
+            const game = document.getElementById('gameFilter').value;
+            const date = document.getElementById('dateFilter').value;
+            const state = stateSelect.value;
+            const city = citySelect.value;
+            const minPrize = parseInt(document.getElementById('prizeMin').value) || 0;
+            const maxPrize = parseInt(document.getElementById('prizeMax').value) || 999999;
 
-        // Function to filter lan houses based on selected filters
-        function filterLanHouses() {
-            const selectedType = document.getElementById('typeFilter').value;
-            const selectedDate = document.getElementById('dateFilter').value; // not used in mock but kept for future
-            const selectedState = stateSelect.value;
-            const selectedCity = citySelect.value;
-            const minPrice = parseInt(document.getElementById('priceMin').value) || 0;
-            const maxPrice = parseInt(document.getElementById('priceMax').value) || 999;
-
-            return lanHousesData.filter(lh => {
-                // Type filter
-                if (selectedType !== 'all' && lh.type !== selectedType) return false;
-                // State filter
-                if (selectedState && lh.state !== selectedState) return false;
-                // City filter
-                if (selectedCity && lh.city !== selectedCity) return false;
-                // Price range
-                if (lh.price < minPrice || lh.price > maxPrice) return false;
+            return championshipsData.filter(champ => {
+                if (type !== 'all' && champ.type !== type) return false;
+                if (game !== 'all' && champ.game !== game) return false;
+                if (date && champ.date < date) return false;
+                if (state && champ.state !== state) return false;
+                if (city && champ.city !== city) return false;
+                if (champ.prize < minPrize || champ.prize > maxPrize) return false;
                 return true;
             });
         }
 
-        // Render grid with filtered results
+        // Render grid
         function renderGrid() {
-            const filtered = filterLanHouses();
-            const gridContainer = document.getElementById('lanHousesGrid');
+            const filtered = filterChampionships();
+            const gridContainer = document.getElementById('championshipsGrid');
             const countSpan = document.getElementById('resultsCount');
-            countSpan.innerText = `${filtered.length} estabelecimento${filtered.length !== 1 ? 's' : ''}`;
+            countSpan.innerText = `${filtered.length} campeonato${filtered.length !== 1 ? 's' : ''}`;
 
             if (filtered.length === 0) {
-                gridContainer.innerHTML = `<div class="col-span-full text-center text-gray-400 py-12 bg-[#0f0f0f] rounded-xl">Nenhuma lan house encontrada com os filtros selecionados.</div>`;
+                gridContainer.innerHTML = `<div class="col-span-full text-center text-gray-400 py-12 bg-[#0f0f0f] rounded-xl">Nenhum campeonato encontrado com os filtros selecionados.</div>`;
                 return;
             }
 
-            gridContainer.innerHTML = filtered.map(lh => `
+            gridContainer.innerHTML = filtered.map(champ => `
                 <div class="bg-[#111111] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col border border-[#2a2a2a]">
-                    <img src="${lh.image}" alt="${lh.name}" class="card-img w-full h-44 object-cover">
+                    <img src="${champ.image}" alt="${champ.name}" class="card-img w-full h-44 object-cover">
                     <div class="p-4 flex flex-col flex-grow">
-                        <h4 class="text-white text-xl font-semibold mb-1">${lh.name}</h4>
-                        <p class="text-gray-400 text-sm mb-2">${lh.city}, ${lh.state}</p>
-                        <p class="text-[#c9a87b] text-lg font-bold mb-3">R$ ${lh.price}/hora</p>
-                        <button onclick="alert('Funcionalidade em desenvolvimento. Lan house: ${lh.name}')" class="mt-auto bg-[#2c1810] hover:bg-[#3d2a1e] text-white py-2 rounded-lg transition text-sm font-medium">Ver mais</button>
+                        <h4 class="text-white text-xl font-semibold mb-1">${champ.name}</h4>
+                        <p class="text-gray-400 text-sm mb-2">${champ.game} • ${champ.type === 'pro' ? 'Pro Nacional' : (champ.type === 'regional' ? 'Regional' : 'Online')}</p>
+                        <p class="text-gray-400 text-sm mb-1">${champ.city ? `${champ.city}, ${champ.state}` : (champ.state ? champ.state : 'Online')}</p>
+                        <p class="text-[#c9a87b] text-lg font-bold mb-2">Prêmio: R$ ${champ.prize.toLocaleString()}</p>
+                        <p class="text-gray-500 text-xs mb-3">Data: ${new Date(champ.date).toLocaleDateString('pt-BR')}</p>
+                        <button onclick="alert('Funcionalidade em desenvolvimento. Campeonato: ${champ.name.replace(/'/g, "\\'")}')" class="mt-auto bg-[#2c1810] hover:bg-[#3d2a1e] text-white py-2 rounded-lg transition text-sm font-medium">Ver mais</button>
                     </div>
                 </div>
             `).join('');
@@ -316,8 +304,8 @@
             renderGrid();
         });
 
-        // Also trigger filter when any select changes (optional)
-        const filters = ['typeFilter', 'dateFilter', 'stateFilter', 'cityFilter', 'priceMin', 'priceMax'];
+        // Trigger filter on any select/input change
+        const filters = ['typeFilter', 'gameFilter', 'dateFilter', 'stateFilter', 'cityFilter', 'prizeMin', 'prizeMax'];
         filters.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.addEventListener('change', () => renderGrid());
