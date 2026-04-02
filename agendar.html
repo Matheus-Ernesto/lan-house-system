@@ -68,6 +68,30 @@
             object-fit: cover;
             width: 100%;
         }
+
+        .loading-spinner {
+            border: 3px solid #2a2a2a;
+            border-top: 3px solid #c9a87b;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background-color: rgba(220, 38, 38, 0.1);
+            border: 1px solid #dc2626;
+            color: #fca5a5;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -115,20 +139,20 @@
             <h3 class="text-2xl text-white mb-6 border-l-4 border-[#c9a87b] pl-4"
                 style="font-family: 'Rationale-Regular', 'Courier New', monospace;">Filtros</h3>
 
-            <!-- Tipo de agendamento -->
+            <!-- Tipo de agendamento (mapeamento: 0=Todos, 1=Profissional, 2=Amador, 3=Corujão, 4=Outros) -->
             <div class="mb-6">
                 <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Tipo de agendamento</label>
                 <select id="typeFilter"
                     class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-2.5 text-gray-200">
-                    <option value="all">Todos os tipos</option>
-                    <option value="pro">Times profissionais (+6 pessoas obrigatório)</option>
-                    <option value="amador">Times amadores (+5 pessoas obrigatório)</option>
-                    <option value="corujao">Amigos para corujão ou jogatinas (+4 pessoas obrigatório)</option>
-                    <option value="outros">Outros (Entrar em equipes, Jogar sozinho ou em menos de 4 pessoas)</option>
+                    <option value="">Todos os tipos</option>
+                    <option value="1">Times profissionais (+6 pessoas obrigatório)</option>
+                    <option value="2">Times amadores (+5 pessoas obrigatório)</option>
+                    <option value="3">Amigos para corujão ou jogatinas (+4 pessoas obrigatório)</option>
+                    <option value="4">Outros (Entrar em equipes, Jogar sozinho ou em menos de 4 pessoas)</option>
                 </select>
             </div>
 
-            <!-- Data -->
+            <!-- Data (não implementado na API, mantido para futuro) -->
             <div class="mb-6">
                 <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Data</label>
                 <input type="date" id="dateFilter"
@@ -142,11 +166,6 @@
                     <select id="stateFilter"
                         class="bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-2.5 text-gray-200 w-full sm:w-1/2">
                         <option value="">Estado</option>
-                        <option value="SP">São Paulo</option>
-                        <option value="RJ">Rio de Janeiro</option>
-                        <option value="MG">Minas Gerais</option>
-                        <option value="PR">Paraná</option>
-                        <option value="RS">Rio Grande do Sul</option>
                     </select>
                     <select id="cityFilter"
                         class="bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-2.5 text-gray-200 w-full sm:w-1/2">
@@ -195,6 +214,10 @@
             </div>
             <div id="lanHousesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- dynamic cards will appear here -->
+                <div class="col-span-full">
+                    <div class="loading-spinner"></div>
+                    <p class="text-center text-gray-400">Carregando lan houses...</p>
+                </div>
             </div>
         </section>
     </main>
@@ -206,125 +229,242 @@
     </footer>
 
     <script>
-        // Mock data for lan houses (each object represents an establishment)
-        const lanHousesData = [
-            { id: 1, name: "Arena Gamer SP", type: "pro", state: "SP", city: "São Paulo", price: 25, image: "https://picsum.photos/id/1/400/300", description: "Estrutura profissional com PCs de alto desempenho." },
-            { id: 2, name: "Byte & Battle", type: "amador", state: "SP", city: "Campinas", price: 15, image: "https://picsum.photos/id/2/400/300", description: "Ambiente amigável para times amadores." },
-            { id: 3, name: "Noite Gamer", type: "corujao", state: "RJ", city: "Rio de Janeiro", price: 12, image: "https://picsum.photos/id/3/400/300", description: "Corujão com descontos especiais." },
-            { id: 4, name: "Solo Leveling", type: "outros", state: "MG", city: "Belo Horizonte", price: 10, image: "https://picsum.photos/id/4/400/300", description: "Perfeito para quem joga sozinho ou em dupla." },
-            { id: 5, name: "Team Pro House", type: "pro", state: "SP", city: "São Paulo", price: 30, image: "https://picsum.photos/id/5/400/300", description: "Treinamentos profissionais e equipamentos top." },
-            { id: 6, name: "Amigos Play", type: "corujao", state: "PR", city: "Curitiba", price: 14, image: "https://picsum.photos/id/6/400/300", description: "Ideal para grupos de amigos." },
-            { id: 7, name: "Clã Arena", type: "amador", state: "RS", city: "Porto Alegre", price: 18, image: "https://picsum.photos/id/7/400/300", description: "Torneios amadores toda semana." },
-            { id: 8, name: "Free Agents Hub", type: "outros", state: "SP", city: "Santos", price: 8, image: "https://picsum.photos/id/8/400/300", description: "Espaço para encontrar equipes e jogar." },
-            { id: 9, name: "Night Owls", type: "corujao", state: "RJ", city: "Niterói", price: 10, image: "https://picsum.photos/id/9/400/300", description: "Corujão até o amanhecer." },
-            { id: 10, name: "Elite Gaming", type: "pro", state: "MG", city: "Uberlândia", price: 28, image: "https://picsum.photos/id/10/400/300", description: "Equipamentos de competição." },
-            { id: 11, name: "Lan House Central", type: "amador", state: "PR", city: "Londrina", price: 12, image: "https://picsum.photos/id/11/400/300", description: "Ambiente familiar e descontos para grupos." },
-            { id: 12, name: "Solo Station", type: "outros", state: "RS", city: "Caxias do Sul", price: 9, image: "https://picsum.photos/id/12/400/300", description: "Estaçõs individuais para jogadores casuais." }
-        ];
+        // Configuração da API
+        const API_BASE_URL = 'http://localhost:8000'; // Altere para o endereço da sua API
 
-        // Helper: populate city dropdown based on selected state
-        const stateSelect = document.getElementById('stateFilter');
-        const citySelect = document.getElementById('cityFilter');
-        const citiesByState = {
-            SP: ['São Paulo', 'Campinas', 'Santos', 'Ribeirão Preto'],
-            RJ: ['Rio de Janeiro', 'Niterói', 'Petrópolis'],
-            MG: ['Belo Horizonte', 'Uberlândia', 'Contagem'],
-            PR: ['Curitiba', 'Londrina', 'Maringá'],
-            RS: ['Porto Alegre', 'Caxias do Sul', 'Pelotas']
-        };
+        // Variáveis globais
+        let estadosList = [];
+        let lanHousesData = [];
 
-        function updateCities() {
-            const selectedState = stateSelect.value;
-            citySelect.innerHTML = '<option value="">Cidade</option>';
-            if (selectedState && citiesByState[selectedState]) {
-                citiesByState[selectedState].forEach(city => {
+        // Helper: Mapeamento de tipo para texto
+        function getTipoTexto(tipo) {
+            const tipos = {
+                1: "Profissional",
+                2: "Amador",
+                3: "Corujão",
+                4: "Outros"
+            };
+            return tipos[tipo] || "Não especificado";
+        }
+
+        // Helper: Carregar estados da API
+        async function loadEstados() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/estados`);
+                if (!response.ok) throw new Error('Erro ao carregar estados');
+                const data = await response.json();
+                estadosList = data.estados;
+                
+                const stateSelect = document.getElementById('stateFilter');
+                stateSelect.innerHTML = '<option value="">Estado</option>';
+                
+                estadosList.forEach(estado => {
                     const option = document.createElement('option');
-                    option.value = city;
-                    option.textContent = city;
+                    option.value = estado.id;
+                    option.textContent = estado.nome;
+                    stateSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar estados:', error);
+                showError('Erro ao carregar lista de estados');
+            }
+        }
+
+        // Helper: Carregar cidades baseado no estado selecionado
+        async function loadCidades(estadoId) {
+            try {
+                const url = estadoId ? `${API_BASE_URL}/cidades?estado_id=${estadoId}` : `${API_BASE_URL}/cidades`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Erro ao carregar cidades');
+                const data = await response.json();
+                
+                const citySelect = document.getElementById('cityFilter');
+                citySelect.innerHTML = '<option value="">Cidade</option>';
+                
+                // Para filtrar cidades localmente (já que a API retorna todas com estado_nome)
+                const cidadesFiltradas = estadoId ? data.cidades.filter(c => c.estado_id === estadoId) : data.cidades;
+                
+                cidadesFiltradas.forEach(cidade => {
+                    const option = document.createElement('option');
+                    option.value = cidade.id;
+                    option.textContent = cidade.nome;
                     citySelect.appendChild(option);
                 });
-            }
-        }
-        stateSelect.addEventListener('change', updateCities);
-        updateCities(); // initial call
-
-        // URL parameter handling for type filter (?type=0,1,2,3)
-        const urlParams = new URLSearchParams(window.location.search);
-        const typeParam = urlParams.get('type');
-        if (typeParam !== null) {
-            const typeSelect = document.getElementById('typeFilter');
-            const mapping = {
-                '0': 'pro',
-                '1': 'amador',
-                '2': 'corujao',
-                '3': 'outros'
-            };
-            if (mapping[typeParam]) {
-                typeSelect.value = mapping[typeParam];
+            } catch (error) {
+                console.error('Erro ao carregar cidades:', error);
             }
         }
 
-        // Function to filter lan houses based on selected filters
-        function filterLanHouses() {
-            const selectedType = document.getElementById('typeFilter').value;
-            const selectedDate = document.getElementById('dateFilter').value; // not used in mock but kept for future
-            const selectedState = stateSelect.value;
-            const selectedCity = citySelect.value;
-            const minPrice = parseInt(document.getElementById('priceMin').value) || 0;
-            const maxPrice = parseInt(document.getElementById('priceMax').value) || 999;
+        // Helper: Carregar lan houses da API com filtros
+        async function loadLanHouses(filters = {}) {
+            try {
+                // Mostrar loading
+                const gridContainer = document.getElementById('lanHousesGrid');
+                gridContainer.innerHTML = `
+                    <div class="col-span-full">
+                        <div class="loading-spinner"></div>
+                        <p class="text-center text-gray-400">Carregando lan houses...</p>
+                    </div>
+                `;
+                
+                // Construir URL com parâmetros
+                let url = `${API_BASE_URL}/lanhouses`;
+                const params = new URLSearchParams();
+                
+                if (filters.tipo && filters.tipo !== '') {
+                    params.append('tipo', filters.tipo);
+                }
+                if (filters.precoMinimo && filters.precoMinimo !== '0') {
+                    params.append('precoMinimo', filters.precoMinimo);
+                }
+                if (filters.precoMaximo && filters.precoMaximo !== '999') {
+                    params.append('precoMaximo', filters.precoMaximo);
+                }
+                
+                if (params.toString()) {
+                    url += `?${params.toString()}`;
+                }
+                
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Erro ao carregar lan houses');
+                const data = await response.json();
+                
+                lanHousesData = data.lan_houses;
+                
+                // Aplicar filtros adicionais que não são suportados diretamente pela API (estado/cidade)
+                let filteredData = [...lanHousesData];
+                
+                // Filtrar por estado (localmente, pois a API não tem esse filtro diretamente)
+                if (filters.estadoId && filters.estadoId !== '') {
+                    // Nota: A tabela lanHouse precisa ter campos localidadeEstado e localidadeCidade
+                    // Como não temos esses campos no mock da API, vamos usar o nome do usuário para demonstração
+                    // Em produção, ajuste conforme sua estrutura de banco de dados
+                    filteredData = filteredData.filter(lh => {
+                        // Placeholder: como a API atual não tem estado/cidade na lanHouse,
+                        // vamos manter todos. Em produção, adicione esses campos à tabela.
+                        return true;
+                    });
+                }
+                
+                renderGrid(filteredData);
+            } catch (error) {
+                console.error('Erro ao carregar lan houses:', error);
+                showError('Erro ao carregar lan houses. Verifique se a API está rodando.');
+            }
+        }
 
-            return lanHousesData.filter(lh => {
-                // Type filter
-                if (selectedType !== 'all' && lh.type !== selectedType) return false;
-                // State filter
-                if (selectedState && lh.state !== selectedState) return false;
-                // City filter
-                if (selectedCity && lh.city !== selectedCity) return false;
-                // Price range
-                if (lh.price < minPrice || lh.price > maxPrice) return false;
-                return true;
-            });
+        // Helper: Mostrar mensagem de erro
+        function showError(message) {
+            const gridContainer = document.getElementById('lanHousesGrid');
+            gridContainer.innerHTML = `
+                <div class="col-span-full">
+                    <div class="error-message">
+                        <p>❌ ${message}</p>
+                        <button onclick="location.reload()" class="mt-3 bg-[#2c1810] hover:bg-[#4a2c1c] text-white px-4 py-2 rounded-lg transition">
+                            Tentar novamente
+                        </button>
+                    </div>
+                </div>
+            `;
         }
 
         // Render grid with filtered results
-        function renderGrid() {
-            const filtered = filterLanHouses();
+        function renderGrid(lanHouses) {
             const gridContainer = document.getElementById('lanHousesGrid');
             const countSpan = document.getElementById('resultsCount');
-            countSpan.innerText = `${filtered.length} estabelecimento${filtered.length !== 1 ? 's' : ''}`;
+            countSpan.innerText = `${lanHouses.length} estabelecimento${lanHouses.length !== 1 ? 's' : ''}`;
 
-            if (filtered.length === 0) {
+            if (lanHouses.length === 0) {
                 gridContainer.innerHTML = `<div class="col-span-full text-center text-gray-400 py-12 bg-[#0f0f0f] rounded-xl">Nenhuma lan house encontrada com os filtros selecionados.</div>`;
                 return;
             }
 
-            gridContainer.innerHTML = filtered.map(lh => `
+            gridContainer.innerHTML = lanHouses.map(lh => `
                 <div class="bg-[#111111] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col border border-[#2a2a2a]">
-                    <img src="${lh.image}" alt="${lh.name}" class="card-img w-full h-44 object-cover">
+                    <img src="${lh.foto || 'https://picsum.photos/id/1/400/300'}" alt="${lh.nome}" class="card-img w-full h-44 object-cover" onerror="this.src='https://picsum.photos/id/1/400/300'">
                     <div class="p-4 flex flex-col flex-grow">
-                        <h4 class="text-white text-xl font-semibold mb-1">${lh.name}</h4>
-                        <p class="text-gray-400 text-sm mb-2">${lh.city}, ${lh.state}</p>
-                        <p class="text-[#c9a87b] text-lg font-bold mb-3">R$ ${lh.price}/hora</p>
-                        <button onclick="window.location.href='vermais.html?type=lanhouse&id=1'" class="mt-auto bg-[#2c1810] hover:bg-[#3d2a1e] text-white py-2 rounded-lg transition text-sm font-medium">Ver mais</button>
+                        <h4 class="text-white text-xl font-semibold mb-1">${lh.nome || 'Lan House'}</h4>
+                        <p class="text-gray-400 text-sm mb-1">${lh.usuario_nome || 'Proprietário'}</p>
+                        <p class="text-gray-400 text-sm mb-2">Tipo: ${getTipoTexto(lh.tipoPublico)}</p>
+                        <p class="text-[#c9a87b] text-lg font-bold mb-3">R$ ${lh.preco || 0}/hora</p>
+                        <button onclick="window.location.href='vermais.html?type=lanhouse&id=${lh.id}'" class="mt-auto bg-[#2c1810] hover:bg-[#3d2a1e] text-white py-2 rounded-lg transition text-sm font-medium">Ver mais</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // Search button click
+        // Função para coletar filtros e buscar dados
+        async function searchLanHouses() {
+            const selectedType = document.getElementById('typeFilter').value;
+            const selectedState = document.getElementById('stateFilter').value;
+            const selectedCity = document.getElementById('cityFilter').value;
+            const minPrice = document.getElementById('priceMin').value;
+            const maxPrice = document.getElementById('priceMax').value;
+            const selectedDate = document.getElementById('dateFilter').value; // não usado na API por enquanto
+            
+            const filters = {
+                tipo: selectedType !== '' ? parseInt(selectedType) : null,
+                precoMinimo: minPrice !== '0' ? parseFloat(minPrice) : null,
+                precoMaximo: maxPrice !== '999' ? parseFloat(maxPrice) : null,
+                estadoId: selectedState !== '' ? parseInt(selectedState) : null,
+                cidadeId: selectedCity !== '' ? parseInt(selectedCity) : null,
+                data: selectedDate
+            };
+            
+            await loadLanHouses(filters);
+        }
+
+        // URL parameter handling for type filter
+        function handleUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const typeParam = urlParams.get('type');
+            if (typeParam !== null) {
+                const typeSelect = document.getElementById('typeFilter');
+                // Mapeamento: 0=pro(1), 1=amador(2), 2=corujao(3), 3=outros(4)
+                const mapping = {
+                    '0': '1',
+                    '1': '2',
+                    '2': '3',
+                    '3': '4'
+                };
+                if (mapping[typeParam]) {
+                    typeSelect.value = mapping[typeParam];
+                }
+            }
+        }
+
+        // Event Listeners
         document.getElementById('searchBtn').addEventListener('click', () => {
-            renderGrid();
+            searchLanHouses();
         });
 
-        // Also trigger filter when any select changes (optional)
-        const filters = ['typeFilter', 'dateFilter', 'stateFilter', 'cityFilter', 'priceMin', 'priceMax'];
-        filters.forEach(id => {
+        // Carregar cidades quando o estado mudar
+        document.getElementById('stateFilter').addEventListener('change', (e) => {
+            const estadoId = e.target.value;
+            if (estadoId) {
+                loadCidades(parseInt(estadoId));
+            } else {
+                document.getElementById('cityFilter').innerHTML = '<option value="">Cidade</option>';
+            }
+            // Opcional: recarregar resultados ao mudar filtro
+            // searchLanHouses();
+        });
+
+        // Carregar resultados quando outros filtros mudarem (opcional)
+        const autoSearchFilters = ['typeFilter', 'priceMin', 'priceMax'];
+        autoSearchFilters.forEach(id => {
             const el = document.getElementById(id);
-            if (el) el.addEventListener('change', () => renderGrid());
+            if (el) el.addEventListener('change', () => searchLanHouses());
         });
 
-        // Initial render
-        renderGrid();
+        // Inicialização
+        async function init() {
+            handleUrlParams();
+            await loadEstados();
+            await searchLanHouses();
+        }
+        
+        init();
     </script>
 </body>
 

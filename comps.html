@@ -68,6 +68,61 @@
             object-fit: cover;
             width: 100%;
         }
+
+        .loading-spinner {
+            border: 3px solid #2a2a2a;
+            border-top: 3px solid #c9a87b;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background-color: rgba(220, 38, 38, 0.1);
+            border: 1px solid #dc2626;
+            color: #fca5a5;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 48px 0;
+            background-color: #0f0f0f;
+            border-radius: 12px;
+        }
+
+        .badge-categoria {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-amador {
+            background-color: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+        }
+
+        .badge-semi-pro {
+            background-color: rgba(234, 179, 8, 0.2);
+            color: #fbbf24;
+        }
+
+        .badge-profissional {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
     </style>
 </head>
 
@@ -115,29 +170,24 @@
             <h3 class="text-2xl text-white mb-6 border-l-4 border-[#c9a87b] pl-4"
                 style="font-family: 'Rationale-Regular', 'Courier New', monospace;">Filtros</h3>
 
-            <!-- Tipo de campeonato -->
+            <!-- Categoria do campeonato (mapeamento: 0=Amador, 1=Semi-Pro, 2=Profissional) -->
             <div class="mb-6">
-                <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Tipo de campeonato</label>
-                <select id="typeFilter"
+                <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Categoria</label>
+                <select id="categoryFilter"
                     class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-2.5 text-gray-200">
-                    <option value="all">Todos os tipos</option>
-                    <option value="pro">Pro Nacional</option>
-                    <option value="regional">Regional</option>
-                    <option value="online">Online</option>
+                    <option value="">Todas as categorias</option>
+                    <option value="0">Amador</option>
+                    <option value="1">Semi-Pro</option>
+                    <option value="2">Profissional</option>
                 </select>
             </div>
 
-            <!-- Jogo -->
+            <!-- Jogo (carregado da API) -->
             <div class="mb-6">
                 <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Jogo</label>
                 <select id="gameFilter"
                     class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-2.5 text-gray-200">
-                    <option value="all">Todos os jogos</option>
-                    <option value="CS2">Counter-Strike 2</option>
-                    <option value="Valorant">Valorant</option>
-                    <option value="LOL">League of Legends</option>
-                    <option value="Dota2">Dota 2</option>
-                    <option value="Fortnite">Fortnite</option>
+                    <option value="">Todos os jogos</option>
                 </select>
             </div>
 
@@ -148,27 +198,23 @@
                     class="w-full bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-2.5 text-gray-200">
             </div>
 
-            <!-- Região (Estado + Cidade) -->
+            <!-- Região (Estado + Cidade) - Placeholder para futura implementação -->
             <div class="mb-6">
                 <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Região</label>
                 <div class="flex flex-col sm:flex-row gap-3">
                     <select id="stateFilter"
                         class="bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-2.5 text-gray-200 w-full sm:w-1/2">
                         <option value="">Estado</option>
-                        <option value="SP">São Paulo</option>
-                        <option value="RJ">Rio de Janeiro</option>
-                        <option value="MG">Minas Gerais</option>
-                        <option value="PR">Paraná</option>
-                        <option value="RS">Rio Grande do Sul</option>
                     </select>
                     <select id="cityFilter"
                         class="bg-[#1a1a1a] border border-[#3a2a20] rounded-lg px-4 py-2.5 text-gray-200 w-full sm:w-1/2">
                         <option value="">Cidade</option>
                     </select>
                 </div>
+                <p class="text-gray-500 text-xs mt-2">* Filtro por localização disponível em breve</p>
             </div>
 
-            <!-- Prêmio (min/max) -->
+            <!-- Prêmio (min/max) - Placeholder -->
             <div class="mb-8">
                 <label class="block text-gray-300 mb-2 text-sm font-semibold tracking-wide">Prêmio (R$)</label>
                 <div class="flex gap-3">
@@ -189,6 +235,7 @@
                         <option value="10000">R$ 10.000</option>
                     </select>
                 </div>
+                <p class="text-gray-500 text-xs mt-2">* Filtro por prêmio disponível em breve</p>
             </div>
 
             <button id="searchBtn"
@@ -203,6 +250,10 @@
             </div>
             <div id="championshipsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- dynamic cards will appear here -->
+                <div class="col-span-full">
+                    <div class="loading-spinner"></div>
+                    <p class="text-center text-gray-400">Carregando campeonatos...</p>
+                </div>
             </div>
         </section>
     </main>
@@ -214,105 +265,297 @@
     </footer>
 
     <script>
-        // Mock data for championships
-        const championshipsData = [
-            { id: 1, name: "Liga Paulista de CS2", type: "regional", game: "CS2", state: "SP", city: "São Paulo", date: "2025-05-15", prize: 5000, image: "https://picsum.photos/id/15/400/300", description: "Campeonato regional com grandes premiações." },
-            { id: 2, name: "Valorant Pro Series", type: "pro", game: "Valorant", state: "SP", city: "Campinas", date: "2025-06-01", prize: 10000, image: "https://picsum.photos/id/16/400/300", description: "Circuito profissional nacional." },
-            { id: 3, name: "LOL Cup Online", type: "online", game: "LOL", state: "", city: "", date: "2025-05-20", prize: 2000, image: "https://picsum.photos/id/17/400/300", description: "Torneio online aberto para todos." },
-            { id: 4, name: "Dota 2 Masters", type: "pro", game: "Dota2", state: "RJ", city: "Rio de Janeiro", date: "2025-07-10", prize: 15000, image: "https://picsum.photos/id/18/400/300", description: "Evento presencial no Rio." },
-            { id: 5, name: "Fortnite Solo Showdown", type: "online", game: "Fortnite", state: "", city: "", date: "2025-05-25", prize: 3000, image: "https://picsum.photos/id/19/400/300", description: "Batalha solo com prêmios." },
-            { id: 6, name: "Campeonato Sul de Valorant", type: "regional", game: "Valorant", state: "RS", city: "Porto Alegre", date: "2025-08-05", prize: 4000, image: "https://picsum.photos/id/20/400/300", description: "Região sul em destaque." },
-            { id: 7, name: "CS2 Amador Cup", type: "regional", game: "CS2", state: "MG", city: "Belo Horizonte", date: "2025-06-15", prize: 1500, image: "https://picsum.photos/id/21/400/300", description: "Para times amadores." }
-        ];
+        // Configuração da API
+        const API_BASE_URL = 'http://localhost:8000';
 
-        // Helper: populate city dropdown based on selected state
-        const stateSelect = document.getElementById('stateFilter');
-        const citySelect = document.getElementById('cityFilter');
-        const citiesByState = {
-            SP: ['São Paulo', 'Campinas', 'Santos', 'Ribeirão Preto'],
-            RJ: ['Rio de Janeiro', 'Niterói', 'Petrópolis'],
-            MG: ['Belo Horizonte', 'Uberlândia', 'Contagem'],
-            PR: ['Curitiba', 'Londrina', 'Maringá'],
-            RS: ['Porto Alegre', 'Caxias do Sul', 'Pelotas']
-        };
+        // Variáveis globais
+        let jogosList = [];
+        let campeonatosData = [];
+        let estadosList = [];
 
-        function updateCities() {
-            const selectedState = stateSelect.value;
-            citySelect.innerHTML = '<option value="">Cidade</option>';
-            if (selectedState && citiesByState[selectedState]) {
-                citiesByState[selectedState].forEach(city => {
-                    const option = document.createElement('option');
-                    option.value = city;
-                    option.textContent = city;
-                    citySelect.appendChild(option);
-                });
+        // Mapeamento de categoria para texto e cor
+        function getCategoriaInfo(categoria) {
+            const categorias = {
+                0: { texto: "Amador", classe: "badge-amador" },
+                1: { texto: "Semi-Pro", classe: "badge-semi-pro" },
+                2: { texto: "Profissional", classe: "badge-profissional" }
+            };
+            return categorias[categoria] || { texto: "Desconhecido", classe: "" };
+        }
+
+        // Formatar data para exibição
+        function formatDate(dateString) {
+            if (!dateString) return "Data não definida";
+            try {
+                return new Date(dateString).toLocaleDateString('pt-BR');
+            } catch {
+                return dateString;
             }
         }
-        stateSelect.addEventListener('change', updateCities);
-        updateCities();
 
-        // Filter function
-        function filterChampionships() {
-            const type = document.getElementById('typeFilter').value;
-            const game = document.getElementById('gameFilter').value;
-            const date = document.getElementById('dateFilter').value;
-            const state = stateSelect.value;
-            const city = citySelect.value;
-            const minPrize = parseInt(document.getElementById('prizeMin').value) || 0;
-            const maxPrize = parseInt(document.getElementById('prizeMax').value) || 999999;
-
-            return championshipsData.filter(champ => {
-                if (type !== 'all' && champ.type !== type) return false;
-                if (game !== 'all' && champ.game !== game) return false;
-                if (date && champ.date < date) return false;
-                if (state && champ.state !== state) return false;
-                if (city && champ.city !== city) return false;
-                if (champ.prize < minPrize || champ.prize > maxPrize) return false;
-                return true;
-            });
+        // Helper: Carregar estados da API
+        async function loadEstados() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/estados`);
+                if (!response.ok) throw new Error('Erro ao carregar estados');
+                const data = await response.json();
+                estadosList = data.estados;
+                
+                const stateSelect = document.getElementById('stateFilter');
+                stateSelect.innerHTML = '<option value="">Estado</option>';
+                
+                estadosList.forEach(estado => {
+                    const option = document.createElement('option');
+                    option.value = estado.id;
+                    option.textContent = estado.nome;
+                    stateSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar estados:', error);
+            }
         }
 
-        // Render grid
-        function renderGrid() {
-            const filtered = filterChampionships();
+        // Helper: Carregar jogos da API
+        async function loadJogos() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/jogos`);
+                if (!response.ok) throw new Error('Erro ao carregar jogos');
+                const data = await response.json();
+                jogosList = data.jogos;
+                
+                const gameFilter = document.getElementById('gameFilter');
+                gameFilter.innerHTML = '<option value="">Todos os jogos</option>';
+                
+                jogosList.forEach(jogo => {
+                    const option = document.createElement('option');
+                    option.value = jogo.id;
+                    option.textContent = jogo.nome;
+                    gameFilter.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar jogos:', error);
+                showError('Erro ao carregar lista de jogos');
+            }
+        }
+
+        // Helper: Carregar campeonatos da API com filtros
+        async function loadCampeonatos(filters = {}) {
+            try {
+                // Mostrar loading
+                const gridContainer = document.getElementById('championshipsGrid');
+                gridContainer.innerHTML = `
+                    <div class="col-span-full">
+                        <div class="loading-spinner"></div>
+                        <p class="text-center text-gray-400">Carregando campeonatos...</p>
+                    </div>
+                `;
+                
+                // Construir URL com parâmetros
+                let url = `${API_BASE_URL}/comps`;
+                const params = new URLSearchParams();
+                
+                if (filters.categoria && filters.categoria !== '') {
+                    params.append('tipo', filters.categoria);
+                }
+                if (filters.jogo && filters.jogo !== '') {
+                    params.append('jogo', filters.jogo);
+                }
+                
+                if (params.toString()) {
+                    url += `?${params.toString()}`;
+                }
+                
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Erro ao carregar campeonatos');
+                const data = await response.json();
+                
+                campeonatosData = data.campeonatos;
+                
+                // Aplicar filtros adicionais que não são suportados diretamente pela API
+                let filteredData = [...campeonatosData];
+                
+                // Filtrar por data (a partir de)
+                if (filters.data && filters.data !== '') {
+                    filteredData = filteredData.filter(comp => {
+                        if (!comp.data) return false;
+                        return comp.data >= filters.data;
+                    });
+                }
+                
+                // Filtrar por prêmio (placeholders - API não tem prêmio ainda)
+                if (filters.premioMin && filters.premioMin > 0) {
+                    // Nota: Adicionar campo premio na tabela campeonato quando disponível
+                    // Por enquanto, mantém todos
+                }
+                if (filters.premioMax && filters.premioMax < 999999) {
+                    // Nota: Adicionar campo premio na tabela campeonato quando disponível
+                }
+                
+                renderGrid(filteredData);
+            } catch (error) {
+                console.error('Erro ao carregar campeonatos:', error);
+                showError('Erro ao carregar campeonatos. Verifique se a API está rodando.');
+            }
+        }
+
+        // Helper: Mostrar mensagem de erro
+        function showError(message) {
+            const gridContainer = document.getElementById('championshipsGrid');
+            gridContainer.innerHTML = `
+                <div class="col-span-full">
+                    <div class="error-message">
+                        <p>❌ ${message}</p>
+                        <button onclick="location.reload()" class="mt-3 bg-[#2c1810] hover:bg-[#4a2c1c] text-white px-4 py-2 rounded-lg transition">
+                            Tentar novamente
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render grid with filtered results
+        function renderGrid(campeonatos) {
             const gridContainer = document.getElementById('championshipsGrid');
             const countSpan = document.getElementById('resultsCount');
-            countSpan.innerText = `${filtered.length} campeonato${filtered.length !== 1 ? 's' : ''}`;
+            countSpan.innerText = `${campeonatos.length} campeonato${campeonatos.length !== 1 ? 's' : ''}`;
 
-            if (filtered.length === 0) {
-                gridContainer.innerHTML = `<div class="col-span-full text-center text-gray-400 py-12 bg-[#0f0f0f] rounded-xl">Nenhum campeonato encontrado com os filtros selecionados.</div>`;
+            if (campeonatos.length === 0) {
+                gridContainer.innerHTML = `
+                    <div class="col-span-full empty-state">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <p>Nenhum campeonato encontrado com os filtros selecionados.</p>
+                    </div>
+                `;
                 return;
             }
 
-            gridContainer.innerHTML = filtered.map(champ => `
+            gridContainer.innerHTML = campeonatos.map(comp => {
+                const categoriaInfo = getCategoriaInfo(comp.categoria);
+                const vagasStatus = comp.vagas_disponiveis > 0 
+                    ? `<span class="text-green-400 text-xs">${comp.vagas_disponiveis} vagas disponíveis</span>`
+                    : `<span class="text-red-400 text-xs">Esgotado</span>`;
+                
+                return `
                 <div class="bg-[#111111] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col border border-[#2a2a2a]">
-                    <img src="${champ.image}" alt="${champ.name}" class="card-img w-full h-44 object-cover">
+                    <img src="${comp.foto || 'https://picsum.photos/id/104/400/300'}" alt="${comp.titulo}" class="card-img w-full h-44 object-cover" onerror="this.src='https://picsum.photos/id/104/400/300'">
                     <div class="p-4 flex flex-col flex-grow">
-                        <h4 class="text-white text-xl font-semibold mb-1">${champ.name}</h4>
-                        <p class="text-gray-400 text-sm mb-2">${champ.game} • ${champ.type === 'pro' ? 'Pro Nacional' : (champ.type === 'regional' ? 'Regional' : 'Online')}</p>
-                        <p class="text-gray-400 text-sm mb-1">${champ.city ? `${champ.city}, ${champ.state}` : (champ.state ? champ.state : 'Online')}</p>
-                        <p class="text-[#c9a87b] text-lg font-bold mb-2">Prêmio: R$ ${champ.prize.toLocaleString()}</p>
-                        <p class="text-gray-500 text-xs mb-3">Data: ${new Date(champ.date).toLocaleDateString('pt-BR')}</p>
-                        <button onclick="window.location.href='vermais.html?type=campeonato&id=1'" class="mt-auto bg-[#2c1810] hover:bg-[#3d2a1e] text-white py-2 rounded-lg transition text-sm font-medium">Ver mais</button>
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="text-white text-xl font-semibold">${comp.titulo || 'Campeonato'}</h4>
+                            <span class="badge-categoria ${categoriaInfo.classe}">${categoriaInfo.texto}</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-2">
+                            <span class="text-[#c9a87b]">🎮 ${comp.jogo_nome || 'Jogo'}</span>
+                        </p>
+                        <p class="text-gray-400 text-sm mb-1">
+                            👤 Organizador: ${comp.usuario_nome || 'Não informado'}
+                        </p>
+                        <p class="text-gray-400 text-sm mb-2">
+                            📅 ${formatDate(comp.data)}
+                        </p>
+                        <div class="flex justify-between items-center mb-3">
+                            <p class="text-[#c9a87b] text-lg font-bold">
+                                ${comp.premio ? `R$ ${comp.premio.toLocaleString()}` : 'Prêmio não divulgado'}
+                            </p>
+                            ${vagasStatus}
+                        </div>
+                        <p class="text-gray-500 text-xs mb-3 line-clamp-2">
+                            ${comp.descricao || 'Descrição não disponível'}
+                        </p>
+                        <button onclick="window.location.href='vermais.html?type=campeonato&id=${comp.id}'" 
+                                class="mt-auto bg-[#2c1810] hover:bg-[#3d2a1e] text-white py-2 rounded-lg transition text-sm font-medium"
+                                ${comp.vagas_disponiveis === 0 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>
+                            ${comp.vagas_disponiveis > 0 ? 'Inscrever-se' : 'Esgotado'}
+                        </button>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
         }
 
-        // Search button click
+        // Função para coletar filtros e buscar dados
+        async function searchCampeonatos() {
+            const selectedCategory = document.getElementById('categoryFilter').value;
+            const selectedGame = document.getElementById('gameFilter').value;
+            const selectedDate = document.getElementById('dateFilter').value;
+            const minPrize = document.getElementById('prizeMin').value;
+            const maxPrize = document.getElementById('prizeMax').value;
+            
+            const filters = {
+                categoria: selectedCategory !== '' ? parseInt(selectedCategory) : null,
+                jogo: selectedGame !== '' ? parseInt(selectedGame) : null,
+                data: selectedDate,
+                premioMin: minPrize !== '0' ? parseInt(minPrize) : null,
+                premioMax: maxPrize !== '999999' ? parseInt(maxPrize) : null
+            };
+            
+            await loadCampeonatos(filters);
+        }
+
+        // URL parameter handling for type filter
+        function handleUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const typeParam = urlParams.get('type');
+            if (typeParam !== null) {
+                const categorySelect = document.getElementById('categoryFilter');
+                // Mapeamento para categorias da API
+                const mapping = {
+                    '0': '0', // Amador
+                    '1': '1', // Semi-Pro
+                    '2': '2'  // Profissional
+                };
+                if (mapping[typeParam]) {
+                    categorySelect.value = mapping[typeParam];
+                }
+            }
+        }
+
+        // Event Listeners
         document.getElementById('searchBtn').addEventListener('click', () => {
-            renderGrid();
+            searchCampeonatos();
         });
 
-        // Trigger filter on any select/input change
-        const filters = ['typeFilter', 'gameFilter', 'dateFilter', 'stateFilter', 'cityFilter', 'prizeMin', 'prizeMax'];
-        filters.forEach(id => {
+        // Auto-search quando filtros mudarem
+        const autoSearchFilters = ['categoryFilter', 'gameFilter', 'dateFilter'];
+        autoSearchFilters.forEach(id => {
             const el = document.getElementById(id);
-            if (el) el.addEventListener('change', () => renderGrid());
+            if (el) el.addEventListener('change', () => searchCampeonatos());
         });
 
-        // Initial render
-        renderGrid();
+        // Carregar cidades quando o estado mudar (placeholder para futuro)
+        document.getElementById('stateFilter').addEventListener('change', async (e) => {
+            const estadoId = e.target.value;
+            if (estadoId) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/cidades?estado_id=${estadoId}`);
+                    const data = await response.json();
+                    const citySelect = document.getElementById('cityFilter');
+                    citySelect.innerHTML = '<option value="">Cidade</option>';
+                    data.cidades.forEach(cidade => {
+                        const option = document.createElement('option');
+                        option.value = cidade.id;
+                        option.textContent = cidade.nome;
+                        citySelect.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Erro ao carregar cidades:', error);
+                }
+            } else {
+                document.getElementById('cityFilter').innerHTML = '<option value="">Cidade</option>';
+            }
+        });
+
+        // Inicialização
+        async function init() {
+            handleUrlParams();
+            await Promise.all([
+                loadEstados(),
+                loadJogos()
+            ]);
+            await searchCampeonatos();
+        }
+        
+        init();
     </script>
 </body>
 
